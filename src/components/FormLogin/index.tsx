@@ -64,7 +64,7 @@ export default function FormLogin() {
           <Logo fontSize={50} />
         </View>
 
-        <View style={{ paddingTop: 100 }}>
+        <View style={{ paddingTop: 60 }}>
           <CustomInput
             control={control}
             name="email"

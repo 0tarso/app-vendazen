@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.WhiteBackground,
+    backgroundColor: 'red',
     paddingHorizontal: 20,
     flex: 1,
-    // height:'',
+    // height: '100%',
     position: 'relative'
   },
   logoContainer: {
@@ -32,13 +32,15 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 250,
     width: '100%'
   },
   backButtonContainer: {
     position: 'absolute',
-    bottom: 0,
-    width: '100%'
+    bottom: 200,
+    width: '100%',
+    // zIndex: 20,
+    // backgroundColor: 'red'
   },
   backButtonText: {
     textAlign: 'center',

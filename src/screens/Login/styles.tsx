@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.WhiteBackground,
     paddingHorizontal: 20,
     flex: 1,
-    // height:'',
+    // height: '100%',
     position: 'relative'
   },
 

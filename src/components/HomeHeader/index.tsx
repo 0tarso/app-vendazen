@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   text: {
+    fontSize: 16,
     fontFamily: 'MontserratRegular',
     color: "#050505"
   }

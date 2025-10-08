@@ -82,7 +82,12 @@ export default function RegisterForm() {
   };
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} style={{ height: '100%', position: 'relative' }}>
+      <ScrollView
+        showsHorizontalScrollIndicator={false} style={{ paddingHorizontal: 20, height: '100%' }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps='handled'
+        showsVerticalScrollIndicator={false}
+      >
 
         <View style={styles.logoContainer}>
           <Logo fontSize={34} />
