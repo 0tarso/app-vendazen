@@ -3,6 +3,8 @@ import React from 'react'
 import { useAuth } from '@/src/contexts/AuthContext'
 import { LAYOUT } from '@/src/constants/Layout'
 import { useUser } from '@/src/contexts/UserDataContext'
+import { COLORS } from '@/src/constants/Colors'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function HomeHeader() {
 
@@ -15,10 +17,18 @@ export default function HomeHeader() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Olá, {userData?.name}!</Text>
 
-      <TouchableOpacity onPress={handleLogout}>
-        <Text style={styles.text}>Sair</Text>
+      <View style={styles.avatarArea}>
+        <View style={styles.avatarContainer}>
+          {/* <Text style={styles.avatarText}>{userData?.name.slice(0, 1)}</Text> */}
+          <Ionicons name='person-outline' size={18} color={"#ffff"} />
+        </View>
+        <Text style={styles.text}>Olá, {userData?.name}!</Text>
+      </View>
+
+      <TouchableOpacity onPress={() => console.log('Ir para opções')}>
+        {/* <Text style={styles.text}>Sair</Text> */}
+        <Ionicons name='settings-outline' size={20} />
       </TouchableOpacity>
     </View>
   )
@@ -26,15 +36,43 @@ export default function HomeHeader() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     paddingHorizontal: LAYOUT.PADDING_HORIZONTAL,
-    paddingTop: 80,
+    paddingTop: 70,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingBottom: 20,
+    elevation: 1,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderWidth: 1,
+    borderColor: COLORS.GreenSecondary
   },
   text: {
     fontSize: 16,
     fontFamily: 'MontserratRegular',
     color: "#050505"
+  },
+  avatarArea: {
+    // backgroundColor: 'red',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  avatarContainer: {
+    backgroundColor: "green",
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: COLORS.GreenSecondary,
+    elevation: 5
+  },
+  avatarText: {
+    fontFamily: 'MontserratBold',
+    color: COLORS.WhiteFont
   }
 })

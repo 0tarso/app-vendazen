@@ -18,6 +18,7 @@ export default function PurchaseList() {
         const purchases = data
           ?.flatMap((customer) => customer.purchases)
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .splice(0, 5)
 
         setPurchases(purchases)
       }

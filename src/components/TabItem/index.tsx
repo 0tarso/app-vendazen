@@ -20,7 +20,7 @@ export default function TabItem({ state, descriptors, navigation, route, index }
 
   const iconName = {
     "home": "home-outline",
-    "customers": "file-tray-outline",
+    "customers": "people-outline",
     "purchases": "bag-check-outline",
     // "projetos": "folder-outline",
   }[route.name] || "ellipse-outline";

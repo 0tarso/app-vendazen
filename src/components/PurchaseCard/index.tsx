@@ -47,7 +47,9 @@ const styles = StyleSheet.create({
     // padding: 25,
     borderRadius: 30,
     borderColor: COLORS.GreenSecondary,
-    borderWidth: 2
+    borderWidth: 2,
+    elevation: 5,
+    marginBottom: 10
   },
   purchaseValue: {
     fontFamily: 'MontserratBold',
