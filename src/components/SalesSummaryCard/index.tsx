@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 interface SalesSummaryCardProps {
   type: 'sales' | 'debt'
-  value: string
+  value: number
 }
 
 export default function SalesSummaryCard(props: SalesSummaryCardProps) {
@@ -19,7 +19,7 @@ export default function SalesSummaryCard(props: SalesSummaryCardProps) {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.currency}>R$ </Text>
-          <Text style={styles.value}>{props.value}</Text>
+          <Text style={styles.value}>{props.value.toFixed(2)}</Text>
 
         </View>
 

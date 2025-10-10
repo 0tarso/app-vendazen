@@ -3,18 +3,24 @@ import React from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import SalesSummaryCard from '../SalesSummaryCard'
 
-export default function SalesSummary() {
+
+interface SalesSummaryProps {
+  salesValue: number
+  debtsValue: number
+}
+
+export default function SalesSummary(props: SalesSummaryProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Resumo Mensal</Text>
 
       <SalesSummaryCard
         type='sales'
-        value='152.20'
+        value={props.salesValue}
       />
       <SalesSummaryCard
         type='debt'
-        value='40.20'
+        value={props.debtsValue}
       />
     </View>
   )

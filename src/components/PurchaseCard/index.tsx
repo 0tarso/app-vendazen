@@ -39,7 +39,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    marginLeft: 6,
+    marginLeft: 12,
     marginRight: 6,
     width: 150,
     alignItems: 'center',

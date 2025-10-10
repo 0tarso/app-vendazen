@@ -5,6 +5,7 @@ import { Routes } from './src/routes';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { UserProvider } from './src/contexts/UserDataContext';
+import { CustomerProvider } from './src/contexts/CustomerContext';
 
 export default function App() {
 
@@ -38,7 +39,9 @@ export default function App() {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <AuthProvider>
         <UserProvider>
-          <Routes />
+          <CustomerProvider>
+            <Routes />
+          </CustomerProvider>
         </UserProvider>
       </AuthProvider>
     </View>
