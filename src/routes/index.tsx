@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native"
-import TabsRoutes from "./app.routes"
+import AppRoutes from "./app.routes"
 import AuthRoutes from "./auth.routes"
 import { useAuth } from "../contexts/AuthContext"
 
@@ -9,7 +9,7 @@ export const Routes = () => {
 
   return (
     <NavigationContainer>
-      {userLogged ? <TabsRoutes /> : <AuthRoutes />}
+      {userLogged ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   )
 }

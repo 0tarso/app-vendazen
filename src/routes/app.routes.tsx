@@ -3,6 +3,7 @@ import HomeScreen from '../screens/Home';
 import PurchasesScreen from '../screens/Purchase';
 import CustomersScreen from '../screens/Customer';
 import TabBar from '../components/TabBar';
+import NavigateHeader from '../components/NavigateHeader';
 
 export type RootTabParamList = {
   Root: undefined;
@@ -14,10 +15,15 @@ export type RootTabParamList = {
 
 const Tab = createBottomTabNavigator<RootTabParamList>()
 
-export default function TabsRoutes() {
+export default function AppRoutes() {
   return (
     <Tab.Navigator
       tabBar={(props) => (<TabBar {...props} />)}
+      backBehavior='history'
+      screenOptions={{
+        animation: 'shift',
+
+      }}
     >
 
       <Tab.Screen name='home' component={HomeScreen} options={{
@@ -25,10 +31,12 @@ export default function TabsRoutes() {
         headerShown: false
       }} />
       <Tab.Screen name='purchases' component={PurchasesScreen} options={{
-        tabBarLabel: 'vendas'
+        tabBarLabel: 'vendas',
+        header: () => <NavigateHeader title='Vendas' />
       }} />
       <Tab.Screen name='customers' component={CustomersScreen} options={{
-        tabBarLabel: 'clientes'
+        tabBarLabel: 'clientes',
+        header: () => <NavigateHeader title='Clientes' />
       }} />
 
     </Tab.Navigator>
