@@ -1,10 +1,10 @@
-import { PurchaseSchema } from "@/src/schemas/Purchase/purchase-schema"
+import { PurchaseSchema, PurchaseWithCustomer } from "@/src/schemas/Purchase/purchase-schema"
 
 const today = new Date()
 const actualMonth = today.getMonth()
 const actualYear = today.getFullYear()
 
-export const getTotalSales = async (purchases: PurchaseSchema[]) => {
+export const getTotalSales = async (purchases: PurchaseWithCustomer[]) => {
 
   const totalSales = purchases.reduce((acc, item) => {
     const purchaseDate = new Date(item.created_at)

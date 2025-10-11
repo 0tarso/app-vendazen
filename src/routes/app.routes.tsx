@@ -21,7 +21,7 @@ export default function AppRoutes() {
       tabBar={(props) => (<TabBar {...props} />)}
       backBehavior='history'
       screenOptions={{
-        animation: 'shift',
+        animation: 'fade',
 
       }}
     >

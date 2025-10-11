@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { CustomerResponseSchema, CustomerWithPurchases } from "../schemas/Customer/customer-schema";
 import { getCustomersAPI } from "../api/get-customers";
-import { PurchaseSchema } from "../schemas/Purchase/purchase-schema";
+import { PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
 import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
@@ -10,8 +10,11 @@ interface CustomerContextType {
   customerWithPurchases: CustomerWithPurchases | null,
   totalSales: number,
   totalDebts: number,
-  lastPurchases: PurchaseSchema[] | null
+  lastPurchases: PurchaseSchema[] | null,
+  purchases: PurchaseWithCustomer[] | null,
   loadingCustomerData: boolean,
+  filterPurchasesDate: string,
+  setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -29,11 +32,14 @@ export function useCustomer() {
 export function CustomerProvider({ children }: { children: ReactNode }) {
   const { userLogged } = useAuth()
 
+  const [filterPurchasesDate, setFilterPurchasesDate] = useState(new Date().toISOString())
+
   const [customerWithPurchases, setCustomerWithPurchases] = useState<CustomerWithPurchases | null>(null)
 
   const [totalSales, setTotalSales] = useState<number>(0)
   const [totalDebts, setTotalDebts] = useState<number>(0)
 
+  const [purchases, setPurchases] = useState<PurchaseWithCustomer[] | null>(null)
   const [lastPurchases, setLastPurchases] = useState<PurchaseSchema[] | null>(null)
 
   const [loadingCustomerData, setLoadingCustomerData] = useState(true)
@@ -57,18 +63,24 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
       const data = await getCustomersAPI()
       if (data) {
         const purchases = data
-          ?.flatMap((customer) => customer.purchases)
+          ?.flatMap((customer) =>
+            customer.purchases.map((purchase) => ({
+              ...purchase,
+              customerName: customer.name,
+            }))
+          )
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
         const totalSales = await getTotalSales(purchases)
 
         const totalDebts = await getTotalDebts(purchases)
 
-        const lastPurchases = purchases.splice(0, 5)
+        const lastPurchases = purchases.slice(0, 5)
 
         setLastPurchases(lastPurchases)
         setTotalSales(totalSales)
         setTotalDebts(totalDebts)
+        setPurchases(purchases)
       }
 
     } catch (error) {
@@ -78,6 +90,36 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const filterPurchases = async () => {
+
+    console.log(filterPurchasesDate)
+    console.log(purchases)
+
+    const purchaseFiltered = purchases?.filter((purchase) => {
+      const purchaseDate = new Date(purchase.created_at)
+      purchaseDate.setHours(0, 0, 0, 0);
+
+
+      const dateFilter = new Date(filterPurchasesDate)
+      dateFilter.setHours(0, 0, 0, 0);
+
+      console.log('purchaseDate -> ', purchaseDate)
+      console.log('dateFilter -> ', dateFilter)
+
+      if (purchaseDate === dateFilter) {
+        return purchase
+      }
+    })
+
+    console.log('Filtrado -> ', purchaseFiltered)
+
+    if (purchaseFiltered) {
+      setPurchases(purchaseFiltered)
+    }
+
+    setPurchases(null)
+  }
+
 
   const value: CustomerContextType = {
     customerWithPurchases,
@@ -85,6 +127,10 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     lastPurchases,
     totalDebts,
     totalSales,
+    purchases,
+    // filterPurchases,
+    filterPurchasesDate,
+    setFilterPurchasesDate
   }
 
 
