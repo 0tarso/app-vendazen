@@ -3,7 +3,7 @@ import HomeScreen from '../screens/Home';
 import PurchasesScreen from '../screens/Purchase';
 import CustomersScreen from '../screens/Customer';
 import TabBar from '../components/TabBar';
-import NavigateHeader from '../components/NavigateHeader';
+import NavigationHeader from '../components/NavigationHeade';
 
 export type RootTabParamList = {
   Root: undefined;
@@ -21,8 +21,7 @@ export default function AppRoutes() {
       tabBar={(props) => (<TabBar {...props} />)}
       backBehavior='history'
       screenOptions={{
-        animation: 'fade',
-
+        animation: 'none',
       }}
     >
 
@@ -32,11 +31,11 @@ export default function AppRoutes() {
       }} />
       <Tab.Screen name='purchases' component={PurchasesScreen} options={{
         tabBarLabel: 'vendas',
-        header: () => <NavigateHeader title='Vendas' />
+        header: () => <NavigationHeader title='Vendas' />
       }} />
       <Tab.Screen name='customers' component={CustomersScreen} options={{
         tabBarLabel: 'clientes',
-        header: () => <NavigateHeader title='Clientes' />
+        header: () => <NavigationHeader title='Clientes' />
       }} />
 
     </Tab.Navigator>

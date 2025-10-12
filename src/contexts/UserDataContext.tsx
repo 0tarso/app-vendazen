@@ -34,7 +34,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     let user = null
 
     if (!userLogged) return
-    setLoadingUser(true)
+
     try {
 
       user = await getUserByIdAPI(userLogged.user_id)
@@ -49,14 +49,15 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (userLogged) {
-      console.log('UserLogged temos! Vamos buscar dados')
-      const fetch = async () => {
-        await getUserData()
-      }
-
-      fetch()
+    if (!userLogged) {
+      setUserData(null)
     }
+
+    const fetch = async () => {
+      console.log('UserLogged temos! Vamos buscar dados')
+      await getUserData()
+    }
+    fetch()
   }, [userLogged])
 
   const value: UserContextType = {

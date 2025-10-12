@@ -10,7 +10,7 @@ interface NavigateHeaderProps {
   title: string
 }
 
-export default function NavigateHeader(props: NavigateHeaderProps) {
+export default function NavigationHeader(props: NavigateHeaderProps) {
   const { navigate, goBack } = useNavigation()
   const { name } = useRoute()
 
@@ -34,7 +34,7 @@ export default function NavigateHeader(props: NavigateHeaderProps) {
       </View>
 
       {name === 'purchases' && (
-        <View style={{ height: 50 }}>
+        <View style={{}}>
           <CustomDatePicker
             onChangeDate={(dateString) => handleSetFilterDate(dateString)}
           />

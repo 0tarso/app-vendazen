@@ -2,7 +2,7 @@ import { View, ActivityIndicator, ScrollView } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
 import HomeHeader from '@/src/components/HomeHeader'
-import PurchaseList from '@/src/components/PurchaseList'
+import LastPurchaseList from '@/src/components/PurchaseList'
 import SalesSummary from '@/src/components/SalesSummary'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 import { COLORS } from '@/src/constants/Colors'
@@ -24,7 +24,7 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          <PurchaseList
+          <LastPurchaseList
             purchases={lastPurchases}
           />
 

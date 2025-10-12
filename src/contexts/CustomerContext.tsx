@@ -45,15 +45,22 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [loadingCustomerData, setLoadingCustomerData] = useState(true)
 
   useEffect(() => {
-    if (userLogged) {
-
-      const fetch = async () => {
-        console.log('CustomerProvider => Buscando dados')
-        await getCustomerData()
-      }
-
-      fetch()
+    if (!userLogged) {
+      setCustomerWithPurchases(null)
+      setTotalDebts(0)
+      setTotalSales(0)
+      setPurchases(null)
+      setLastPurchases(null)
+      return
     }
+
+    const fetch = async () => {
+      console.log('CustomerProvider => Buscando dados')
+      await getCustomerData()
+    }
+
+    fetch()
+
   }, [userLogged])
 
 

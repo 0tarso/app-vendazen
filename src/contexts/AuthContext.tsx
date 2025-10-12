@@ -86,6 +86,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Lógica de logout
   const logout = async () => {
     setUserLogged(null);
+    setUserLogin(null)
+
     await removeUserToken();
   };
 

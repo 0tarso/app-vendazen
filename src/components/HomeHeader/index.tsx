@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
 import { useAuth } from '@/src/contexts/AuthContext'
 import { LAYOUT } from '@/src/constants/Layout'
@@ -8,8 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 export default function HomeHeader() {
 
-  const { logout } = useAuth()
-  const { userData } = useUser()
+  const { logout, loadingAuth } = useAuth()
+  const { userData, loadingUser } = useUser()
 
   const handleLogout = async () => {
     await logout()
@@ -20,10 +20,20 @@ export default function HomeHeader() {
 
       <View style={styles.avatarArea}>
         <View style={styles.avatarContainer}>
-          {/* <Text style={styles.avatarText}>{userData?.name.slice(0, 1)}</Text> */}
-          <Ionicons name='person-outline' size={18} color={"#ffff"} />
+
+          {loadingUser ? (
+            <ActivityIndicator size={18} color="#ffff" />
+          ) : (
+            <Ionicons name='person-outline' size={18} color={"#ffff"} />
+
+          )}
+
         </View>
-        <Text style={styles.text}>Olá, {userData?.name}!</Text>
+
+        {!loadingUser && userData && (
+          <Text style={styles.text}>Olá, {userData.name}!</Text>
+        )}
+
       </View>
 
       <TouchableOpacity onPress={handleLogout}>
