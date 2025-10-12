@@ -23,11 +23,7 @@ export const authUserAPI = async (userData: AuthSchema) => {
       console.log('User id => ', data.content.user_id)
       console.log('JWT token => ', data.content.token)
 
-      user = {
-        email: data.content.email,
-        token: data.content.token,
-        user_id: data.content.user_id
-      }
+      user = data.content
 
     }
     return user

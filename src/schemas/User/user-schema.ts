@@ -1,4 +1,4 @@
-import z from 'zod';
+import z, { string } from 'zod';
 
 export const userSchema = z.object({
   id: z.number(),
@@ -14,6 +14,10 @@ export const userSchema = z.object({
 export const userResponseSchema = userSchema.omit({ id: true, password: true, })
 export type UserResponse = z.infer<typeof userResponseSchema>
 
+export const registerUserResponseSchema = userSchema.extend({
+  token: string()
+})
+export type RegisterUserResponseSchema = z.infer<typeof registerUserResponseSchema>
 
 export const userByIdResponseSchema = userSchema.omit({ password: true })
 export type UserIdResponse = z.infer<typeof userByIdResponseSchema>

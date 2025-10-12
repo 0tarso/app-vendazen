@@ -2,6 +2,8 @@ import { createContext, useState, useEffect, useContext, ReactNode } from 'react
 import * as SecureStore from 'expo-secure-store';
 import { AuthSchema } from '../schemas/authSchema';
 import { authUserAPI } from '../api/authUser';
+import { RegisterSchema } from '../schemas/registerSchema';
+import { signUpUserAPI } from '../api/sign-up-user';
 
 interface UserDataLogin {
   password: string;
@@ -20,6 +22,7 @@ interface AuthContextType {
   loadingAuth: boolean;
   login: (userData: UserDataLogin) => Promise<void>;
   logout: () => Promise<void>;
+  register: (userData: RegisterSchema) => Promise<void>;
 }
 
 // 3. Cria o contexto
@@ -86,6 +89,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await removeUserToken();
   };
 
+  const register = async (userData: RegisterSchema) => {
+    setLoadingAuth(true)
+
+    try {
+      const user = await signUpUserAPI(userData)
+
+      if (user) {
+        await saveUserToken(user.token)
+        setUserLogged(user)
+      }
+    } catch (error) {
+      console.log('Erro ao registra => ', error)
+    } finally {
+      setLoadingAuth(false)
+    }
+  }
+
   // Verificação de login ao carregar a aplicação
   // useEffect(() => {
   //   const checkLoginStatus = async () => {
@@ -111,7 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadingAuth,
     login,
     logout,
-    userLogged
+    userLogged,
+    register
   };
 
   return (

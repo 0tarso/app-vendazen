@@ -1,10 +1,11 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 import SaleCard from '../SaleCard'
 import { PurchaseWithCustomer } from '@/src/schemas/Purchase/purchase-schema'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/src/constants/Colors'
+import CustomButton from '../CustomButton'
 
 export default function SalesList() {
   const { purchases, filterPurchasesDate } = useCustomer()
@@ -41,6 +42,10 @@ export default function SalesList() {
 
   }, [filterPurchasesDate])
 
+  const showAllPurchases = () => {
+    setPurchasesFiltered(purchases)
+  }
+
   return (
     <View style={{ flex: 1 }}>
 
@@ -54,6 +59,16 @@ export default function SalesList() {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Ionicons name='calendar-clear-outline' size={60} color={COLORS.GreenPrimary} />
           <Text style={{ fontSize: 22, marginTop: 20, textAlign: 'center', fontFamily: "MontserratRegular" }}>Sem vendas nessa data</Text>
+
+          <View style={{ width: '100%', marginTop: 50 }}>
+
+            <CustomButton
+              label='Todas as Vendas'
+              onPress={showAllPurchases}
+              isDisabled={false}
+            />
+
+          </View>
         </View>
       )}
     </View>

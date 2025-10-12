@@ -1,4 +1,4 @@
-import { View, Text, Keyboard, Alert, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Keyboard, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { registerFinalSchema, RegisterSchema } from '@/src/schemas/registerSchema';
@@ -8,12 +8,14 @@ import { AuthTabParamList } from '@/src/routes/auth.routes';
 import Logo from '../Logo';
 import CustomInput from '../CustomInput';
 import CustomButton from '../CustomButton';
-import { COLORS } from '@/src/constants/Colors';
 import { styles } from './styles';
+import { useAuth } from '@/src/contexts/AuthContext';
+import { nextStep, previousStep } from './actions';
 
 export default function RegisterForm() {
 
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
+  const { register } = useAuth()
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -47,38 +49,22 @@ export default function RegisterForm() {
     },
   });
 
+
   const handleNextStep = async () => {
-    let isValid = false
-
-    if (step === 1) isValid = await trigger('name')
-    if (step === 2) isValid = await trigger('email')
-    if (step === 3) isValid = await trigger('password')
-
-    if (isValid) {
-      if (step < 3) setStep(step + 1)
-    }
+    nextStep(step, setStep, trigger)
   }
 
   const handlePreviousStep = async () => {
-    if (step === 3) {
-      setStep(2)
-      reset({ password: '' })
-    }
-    if (step === 2) {
-      setStep(1)
-      reset({ email: '', password: '' })
-    }
-
-    if (step === 1) {
-      navigate('login')
-      reset()
-    }
+    previousStep(step, setStep, reset, navigate)
   }
 
-  const onSubmit = (data: RegisterSchema) => {
-    Alert.alert('Dados do Formulário', JSON.stringify(data));
-    reset()
-    setStep(1)
+  const onSubmit = async (userData: RegisterSchema) => {
+    try {
+      await register(userData)
+    } catch (error) {
+      console.log('Erro onSubmit formulario => ', error)
+    }
+
   };
   return (
     <>

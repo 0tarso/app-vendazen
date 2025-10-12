@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuth } from '@/src/contexts/AuthContext'
 import { LAYOUT } from '@/src/constants/Layout'
 import { useUser } from '@/src/contexts/UserDataContext'
@@ -26,7 +26,7 @@ export default function HomeHeader() {
         <Text style={styles.text}>Olá, {userData?.name}!</Text>
       </View>
 
-      <TouchableOpacity onPress={() => console.log('Ir para opções')}>
+      <TouchableOpacity onPress={handleLogout}>
         {/* <Text style={styles.text}>Sair</Text> */}
         <Ionicons name='settings-outline' size={20} />
       </TouchableOpacity>
