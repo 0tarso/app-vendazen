@@ -3,7 +3,7 @@ import HomeScreen from '../screens/Home';
 import PurchasesScreen from '../screens/Purchase';
 import CustomersScreen from '../screens/Customer';
 import TabBar from '../components/TabBar';
-import NavigationHeader from '../components/NavigationHeade';
+import NavigationHeader from '../components/NavigationHeader';
 
 export type RootTabParamList = {
   Root: undefined;

@@ -7,7 +7,7 @@ import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
 
 interface CustomerContextType {
-  customerWithPurchases: CustomerWithPurchases | null,
+  customerWithPurchases: CustomerWithPurchases[] | null,
   totalSales: number,
   totalDebts: number,
   lastPurchases: PurchaseSchema[] | null,
@@ -34,7 +34,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
   const [filterPurchasesDate, setFilterPurchasesDate] = useState(new Date().toISOString())
 
-  const [customerWithPurchases, setCustomerWithPurchases] = useState<CustomerWithPurchases | null>(null)
+  const [customerWithPurchases, setCustomerWithPurchases] = useState<CustomerWithPurchases[] | null>(null)
 
   const [totalSales, setTotalSales] = useState<number>(0)
   const [totalDebts, setTotalDebts] = useState<number>(0)
@@ -67,28 +67,35 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const getCustomerData = async () => {
 
     try {
-      const data = await getCustomersAPI()
-      if (data) {
-        const purchases = data
-          ?.flatMap((customer) =>
-            customer.purchases.map((purchase) => ({
-              ...purchase,
-              customerName: customer.name,
-            }))
-          )
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      const customersData = await getCustomersAPI()
 
-        const totalSales = await getTotalSales(purchases)
+      if (!customersData) return
 
-        const totalDebts = await getTotalDebts(purchases)
+      const customersDataSorted = [...customersData].sort((a, b) =>
+        a.name.localeCompare(b.name, 'pt', { sensitivity: 'base' })
+      )
 
-        const lastPurchases = purchases.slice(0, 5)
+      const purchases = customersData
+        ?.flatMap((customer) =>
+          customer.purchases.map((purchase) => ({
+            ...purchase,
+            customerName: customer.name,
+          }))
+        )
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-        setLastPurchases(lastPurchases)
-        setTotalSales(totalSales)
-        setTotalDebts(totalDebts)
-        setPurchases(purchases)
-      }
+      const totalSales = await getTotalSales(purchases)
+
+      const totalDebts = await getTotalDebts(purchases)
+
+      const lastPurchases = purchases.slice(0, 5)
+
+      setLastPurchases(lastPurchases)
+      setTotalSales(totalSales)
+      setTotalDebts(totalDebts)
+      setPurchases(purchases)
+      setCustomerWithPurchases(customersDataSorted)
+
 
     } catch (error) {
       console.log('Erro em CustomerProvider => ', error)
@@ -96,37 +103,6 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
       setLoadingCustomerData(false)
     }
   }
-
-  const filterPurchases = async () => {
-
-    console.log(filterPurchasesDate)
-    console.log(purchases)
-
-    const purchaseFiltered = purchases?.filter((purchase) => {
-      const purchaseDate = new Date(purchase.created_at)
-      purchaseDate.setHours(0, 0, 0, 0);
-
-
-      const dateFilter = new Date(filterPurchasesDate)
-      dateFilter.setHours(0, 0, 0, 0);
-
-      console.log('purchaseDate -> ', purchaseDate)
-      console.log('dateFilter -> ', dateFilter)
-
-      if (purchaseDate === dateFilter) {
-        return purchase
-      }
-    })
-
-    console.log('Filtrado -> ', purchaseFiltered)
-
-    if (purchaseFiltered) {
-      setPurchases(purchaseFiltered)
-    }
-
-    setPurchases(null)
-  }
-
 
   const value: CustomerContextType = {
     customerWithPurchases,
