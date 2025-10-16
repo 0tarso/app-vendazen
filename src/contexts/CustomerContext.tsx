@@ -5,6 +5,7 @@ import { PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purcha
 import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
+import { nullable } from "zod";
 
 interface CustomerContextType {
   customerWithPurchases: CustomerWithPurchases[] | null,
@@ -15,6 +16,7 @@ interface CustomerContextType {
   loadingCustomerData: boolean,
   filterPurchasesDate: string,
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
+  getCustomerById: (customerId: string) => CustomerWithPurchases | null
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -104,6 +106,16 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     }
   }
 
+
+  const getCustomerById = (customerId: string) => {
+
+    const customer = customerWithPurchases?.filter((customer) => customer.id.toString() === customerId)[0]
+
+    if (!customer) return null
+
+    return customer
+  }
+
   const value: CustomerContextType = {
     customerWithPurchases,
     loadingCustomerData,
@@ -113,7 +125,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     purchases,
     // filterPurchases,
     filterPurchasesDate,
-    setFilterPurchasesDate
+    setFilterPurchasesDate,
+    getCustomerById
   }
 
 

@@ -1,9 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/Home';
-import PurchasesScreen from '../screens/Purchase';
-import CustomersScreen from '../screens/Customer';
+import PurchasesScreen from '../screens/Purchases';
+import CustomersScreen from '../screens/Customers';
 import TabBar from '../components/TabBar';
 import NavigationHeader from '../components/NavigationHeader';
+import CustomerStackRoutes from './customerStack.routes';
 
 export type RootTabParamList = {
   Root: undefined;
@@ -33,9 +34,9 @@ export default function AppRoutes() {
         tabBarLabel: 'vendas',
         header: () => <NavigationHeader title='Vendas' />
       }} />
-      <Tab.Screen name='customers' component={CustomersScreen} options={{
+      <Tab.Screen name='customers' component={CustomerStackRoutes} options={{
         tabBarLabel: 'clientes',
-        header: () => <NavigationHeader title='Clientes' />
+        headerShown: false
       }} />
 
     </Tab.Navigator>

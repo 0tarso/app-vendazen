@@ -5,19 +5,19 @@ import { COLORS } from '@/src/constants/Colors'
 
 interface CustomerCardProps {
   customer: CustomerWithPurchases
+  onPress: () => void
 }
 
-export default function CustomerCard({ customer }: CustomerCardProps) {
+export default function CustomerCard({ customer, onPress }: CustomerCardProps) {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container}
+      onPress={onPress}
+    >
       <View>
         <Text style={styles.name}>{customer.name}</Text>
 
       </View>
 
-      {/* <View>
-        <Text>{customer.}</Text>
-      </View> */}
     </TouchableOpacity>
   )
 }
