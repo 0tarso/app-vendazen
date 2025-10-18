@@ -123,6 +123,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const createCustomer = async (userData: CreateCustomerSchema) => {
     let newUser = null
 
+    setLoadingCustomerData(true)
     try {
       newUser = await insertCustomerAPI(userData)
 
@@ -134,6 +135,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
     } catch (error) {
       console.log('Erro em createCustomer => ', error)
+    } finally {
+      setLoadingCustomerData(false)
     }
 
     return newUser

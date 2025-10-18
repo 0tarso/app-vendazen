@@ -7,11 +7,12 @@ interface CustomButtonProps {
   onPress: () => void
   label: string
   isDisabled: boolean
+  loading?: boolean
 }
 
-export default function CustomButton({ onPress, label, isDisabled }: CustomButtonProps) {
+export default function CustomButton({ onPress, loading, label, isDisabled }: CustomButtonProps) {
 
-  const { loadingAuth: loading } = useAuth()
+  // const { loadingAuth: loading } = useAuth()
 
   return (
     <View style={styles.container}>

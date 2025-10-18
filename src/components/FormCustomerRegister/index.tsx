@@ -15,7 +15,7 @@ import { CustomerListNavigationProp } from '../CustomerList';
 export default function FormCustomerRegister() {
 
   const { navigate } = useNavigation<CustomerListNavigationProp>()
-  const { createCustomer } = useCustomer()
+  const { createCustomer, loadingCustomerData } = useCustomer()
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -96,6 +96,7 @@ export default function FormCustomerRegister() {
                 isDisabled={false}
                 label='Adicionar'
                 onPress={handleSubmit(onSubmit)}
+                loading={loadingCustomerData}
               />
             </View>
           </>
@@ -110,6 +111,7 @@ export default function FormCustomerRegister() {
               isDisabled={false}
               label='Adicionar'
               onPress={handleSubmit(onSubmit)}
+              loading={loadingCustomerData}
             />
           </View>
         </>

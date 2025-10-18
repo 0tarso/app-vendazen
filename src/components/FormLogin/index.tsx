@@ -88,6 +88,7 @@ export default function FormLogin() {
                 isDisabled={false}
                 label='Entrar'
                 onPress={handleSubmit(onSubmit)}
+                loading={loadingAuth}
               />
             </View>
 
@@ -110,6 +111,7 @@ export default function FormLogin() {
               isDisabled={false}
               label='Entrar'
               onPress={handleSubmit(onSubmit)}
+              loading={loadingAuth}
             />
           </View>
         </>

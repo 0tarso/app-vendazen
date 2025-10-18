@@ -15,7 +15,7 @@ import { nextStep, previousStep } from './actions';
 export default function RegisterForm() {
 
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
-  const { register } = useAuth()
+  const { register, loadingAuth } = useAuth()
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -163,6 +163,7 @@ export default function RegisterForm() {
                   isDisabled={false}
                   label='Finalizar'
                   onPress={handleSubmit(onSubmit)}
+                  loading={loadingAuth}
                 />
               </View>
             )}
@@ -206,6 +207,7 @@ export default function RegisterForm() {
                 isDisabled={false}
                 label='Finalizar'
                 onPress={handleSubmit(onSubmit)}
+                loading={loadingAuth}
               />
             </View>
           )}
