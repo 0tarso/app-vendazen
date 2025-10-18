@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes'
 
 
-type CustomerListNavigationProp = StackNavigationProp<
+export type CustomerListNavigationProp = StackNavigationProp<
   CustomerStackParamList,
   'customer-list'
 >;
@@ -27,6 +27,9 @@ export default function CustomerList() {
     <View style={styles.container}>
       {customerWithPurchases && (
         <FlatList
+          contentContainerStyle={{ paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           data={customerWithPurchases}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (

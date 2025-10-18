@@ -16,7 +16,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
     const date = new Date(purchase.created_at)
     const convertedDate = new Date(date).toLocaleDateString('pt-BR')
 
-    const time = `${date.getHours()}:${date.getMinutes()}`
+    const time = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
 
     setTime(time)
     setDateToString(convertedDate)

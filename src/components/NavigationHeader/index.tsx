@@ -26,7 +26,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
         <TouchableOpacity hitSlop={10}
           onPress={() => goBack()}
         >
-          <Ionicons name='arrow-back-outline' size={20} color={COLORS.GreenPrimary} />
+          <Ionicons name='arrow-back-outline' size={26} color={COLORS.GreenPrimary} />
 
         </TouchableOpacity>
         <Text style={styles.title}>{props.title}</Text>
@@ -40,6 +40,14 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
           />
         </View>
       )}
+
+      {name === 'customer-list' && (
+        <TouchableOpacity
+          onPress={() => navigate('customer-register')}
+        >
+          <Ionicons name='person-add-outline' size={28} color={COLORS.GreenPrimary} />
+        </TouchableOpacity>
+      )}
     </View>
   )
 
@@ -48,14 +56,14 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffff',
+    backgroundColor: COLORS.WhiteBackground,
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    elevation: 1,
+    elevation: 5,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     borderWidth: 1,
@@ -64,12 +72,14 @@ const styles = StyleSheet.create({
   navigationArea: {
     flexDirection: 'row',
     height: 40,
-    alignItems: 'center'
+    alignItems: 'flex-end',
+
   },
   title: {
     fontFamily: 'MontserratRegular',
     fontSize: 18,
     marginLeft: 10,
+    color: COLORS.GreenPrimary
   },
 
 })

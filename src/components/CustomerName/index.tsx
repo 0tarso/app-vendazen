@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
   name: {
     color: COLORS.GreenPrimary,
     fontFamily: 'MontserratSemiBold',
-    fontSize: 24
+    fontSize: 30
   },
 })

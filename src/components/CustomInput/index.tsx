@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardType } from 'react-native'
 import React, { useState } from 'react'
 import { Controller } from 'react-hook-form';
 import { COLORS } from '../../constants/Colors';
@@ -8,10 +8,11 @@ interface InputProps {
   control: any;
   name: string;
   placeholder?: string;
-  isPassword: boolean
+  isPassword: boolean;
+  keyboardType?: KeyboardType
 }
 
-export default function CustomInput({ control, name, placeholder, isPassword }: InputProps) {
+export default function CustomInput({ control, name, placeholder, isPassword, keyboardType }: InputProps) {
 
   const [notShowPassword, setNotShowPassword] = useState(true)
 
@@ -46,6 +47,7 @@ export default function CustomInput({ control, name, placeholder, isPassword }: 
               onChangeText={onChange}
               value={value}
               secureTextEntry={isPassword ? notShowPassword : false}
+              keyboardType={keyboardType ? keyboardType : 'default'}
             />
             {!error && <Text style={{ marginTop: 5, fontSize: 12, opacity: 0 }}>.</Text>}
             {error && <Text style={styles.errorText}>{error.message}</Text>}

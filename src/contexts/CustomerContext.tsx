@@ -6,17 +6,21 @@ import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
 import { nullable } from "zod";
+import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
+import { insertCustomerAPI } from "../api/insert-customer";
 
 interface CustomerContextType {
-  customerWithPurchases: CustomerWithPurchases[] | null,
   totalSales: number,
   totalDebts: number,
-  lastPurchases: PurchaseSchema[] | null,
   purchases: PurchaseWithCustomer[] | null,
+  lastPurchases: PurchaseSchema[] | null,
+  customerWithPurchases: CustomerWithPurchases[] | null,
   loadingCustomerData: boolean,
   filterPurchasesDate: string,
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
-  getCustomerById: (customerId: string) => CustomerWithPurchases | null
+  getCustomerById: (customerId: string) => CustomerWithPurchases | null,
+  createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
+
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -116,6 +120,25 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     return customer
   }
 
+  const createCustomer = async (userData: CreateCustomerSchema) => {
+    let newUser = null
+
+    try {
+      newUser = await insertCustomerAPI(userData)
+
+      if (newUser) {
+        console.log(newUser)
+
+        await getCustomerData()
+      }
+
+    } catch (error) {
+      console.log('Erro em createCustomer => ', error)
+    }
+
+    return newUser
+  }
+
   const value: CustomerContextType = {
     customerWithPurchases,
     loadingCustomerData,
@@ -126,7 +149,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     // filterPurchases,
     filterPurchasesDate,
     setFilterPurchasesDate,
-    getCustomerById
+    getCustomerById,
+    createCustomer
   }
 
 
