@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 import { useCustomer } from '@/src/contexts/CustomerContext';
-import { CustomerWithPurchases } from '@/src/schemas/Customer/customer-schema';
+import { CustomerWithPurchasesAndPayments } from '@/src/schemas/Customer/customer-schema';
 import NavigationHeader from '@/src/components/NavigationHeader';
 import { Ionicons } from '@expo/vector-icons';
 import CustomerTitle from '@/src/components/CustomerName';
@@ -19,7 +19,7 @@ export default function CustomerDetails() {
 
   const { getCustomerById } = useCustomer()
 
-  const [customer, setCustomer] = useState<CustomerWithPurchases | null>(null)
+  const [customer, setCustomer] = useState<CustomerWithPurchasesAndPayments | null>(null)
   const [lastPurchases, setLastPurchases] = useState<PurchaseSchema[] | null>(null)
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import z from "zod";
 import { cpfValidation } from "../../utils/cpf-validation";
 import { purchaseSchema } from "../Purchase/purchase-schema";
+import { paymentSchema } from "../Payment/payment-schema";
 
 export const customerSchema = z.object({
   id: z.number(),
@@ -37,7 +38,8 @@ export type CreateCustomerSchema = z.infer<typeof createCustomerSchema>
 
 
 
-export const customerWithPurchasesSchema = customerSchema.extend({
-  purchases: z.array(purchaseSchema)
+export const customerWithPurchasesAndPaymentsSchema = customerSchema.extend({
+  purchases: z.array(purchaseSchema),
+  payments: z.array(paymentSchema)
 })
-export type CustomerWithPurchases = z.infer<typeof customerWithPurchasesSchema> 
+export type CustomerWithPurchasesAndPayments = z.infer<typeof customerWithPurchasesAndPaymentsSchema> 

@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { CustomerResponseSchema, CustomerWithPurchases } from "../schemas/Customer/customer-schema";
+import { CustomerResponseSchema, CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema";
 import { getCustomersAPI } from "../api/get-customers";
 import { PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
 import { useAuth } from "./AuthContext";
@@ -8,17 +8,20 @@ import { getTotalDebts } from "../utils/get-total-debts";
 import { nullable } from "zod";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
 import { insertCustomerAPI } from "../api/insert-customer";
+import { PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
 
 interface CustomerContextType {
   totalSales: number,
   totalDebts: number,
+  payments: PaymentWithCustomerName[] | null,
+  lastPayments: PaymentWithCustomerName[] | null,
   purchases: PurchaseWithCustomer[] | null,
   lastPurchases: PurchaseSchema[] | null,
-  customerWithPurchases: CustomerWithPurchases[] | null,
+  fullCustomerData: CustomerWithPurchasesAndPayments[] | null,
   loadingCustomerData: boolean,
   filterPurchasesDate: string,
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
-  getCustomerById: (customerId: string) => CustomerWithPurchases | null,
+  getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
 
 }
@@ -40,7 +43,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
   const [filterPurchasesDate, setFilterPurchasesDate] = useState(new Date().toISOString())
 
-  const [customerWithPurchases, setCustomerWithPurchases] = useState<CustomerWithPurchases[] | null>(null)
+  const [fullCustomerData, setFullCustomerData] = useState<CustomerWithPurchasesAndPayments[] | null>(null)
 
   const [totalSales, setTotalSales] = useState<number>(0)
   const [totalDebts, setTotalDebts] = useState<number>(0)
@@ -48,11 +51,14 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [purchases, setPurchases] = useState<PurchaseWithCustomer[] | null>(null)
   const [lastPurchases, setLastPurchases] = useState<PurchaseSchema[] | null>(null)
 
+  const [payments, setPayments] = useState<PaymentWithCustomerName[] | null>(null)
+  const [lastPayments, setLastPayments] = useState<PaymentWithCustomerName[] | null>(null)
+
   const [loadingCustomerData, setLoadingCustomerData] = useState(true)
 
   useEffect(() => {
     if (!userLogged) {
-      setCustomerWithPurchases(null)
+      setFullCustomerData(null)
       setTotalDebts(0)
       setTotalSales(0)
       setPurchases(null)
@@ -85,7 +91,16 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
         ?.flatMap((customer) =>
           customer.purchases.map((purchase) => ({
             ...purchase,
-            customerName: customer.name,
+            customer_name: customer.name,
+          }))
+        )
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+      const payments = customersData
+        ?.flatMap((customer) =>
+          customer.payments.map((payment) => ({
+            ...payment,
+            customer_name: customer.name,
           }))
         )
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -95,12 +110,15 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
       const totalDebts = await getTotalDebts(purchases)
 
       const lastPurchases = purchases.slice(0, 5)
+      const lastPayments = payments.slice(0, 5)
 
       setLastPurchases(lastPurchases)
       setTotalSales(totalSales)
       setTotalDebts(totalDebts)
       setPurchases(purchases)
-      setCustomerWithPurchases(customersDataSorted)
+      setPayments(payments)
+      setLastPayments(lastPayments)
+      setFullCustomerData(customersDataSorted)
 
 
     } catch (error) {
@@ -113,7 +131,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
   const getCustomerById = (customerId: string) => {
 
-    const customer = customerWithPurchases?.filter((customer) => customer.id.toString() === customerId)[0]
+    const customer = fullCustomerData?.filter((customer) => customer.id.toString() === customerId)[0]
 
     if (!customer) return null
 
@@ -143,17 +161,19 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   }
 
   const value: CustomerContextType = {
-    customerWithPurchases,
+    fullCustomerData,
+    getCustomerById,
     loadingCustomerData,
-    lastPurchases,
-    totalDebts,
-    totalSales,
     purchases,
-    // filterPurchases,
+    lastPurchases,
     filterPurchasesDate,
     setFilterPurchasesDate,
-    getCustomerById,
-    createCustomer
+    totalDebts,
+    totalSales,
+    // filterPurchases,
+    createCustomer,
+    payments,
+    lastPayments
   }
 
 

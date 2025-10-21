@@ -13,7 +13,7 @@ export const purchaseSchema = z.object({
 
 export type PurchaseSchema = z.infer<typeof purchaseSchema>
 
-export type PurchaseWithCustomer = PurchaseSchema & { customerName: string }
+export type PurchaseWithCustomer = PurchaseSchema & { customer_name: string }
 
 export const createPurchaseSchema = purchaseSchema.omit({
   id: true, paid: true, due_date: true, created_at: true, updated_at: true

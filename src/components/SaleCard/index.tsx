@@ -17,10 +17,12 @@ export default function SaleCard(props: SaleCardProps) {
     const date = new Date(props.purchase.created_at)
     const convertedDate = new Date(date).toLocaleDateString('pt-BR')
 
-    const time = `${date.getHours()}:${date.getMinutes()}`
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const time = `${hours}:${minutes}`
 
-    const name = props.purchase.customerName.split(' ', 1)
-    const lastName = props.purchase.customerName.split(' ', 2)[1][0].toUpperCase()
+    const name = props.purchase.customer_name.split(' ', 1)
+    const lastName = props.purchase.customer_name.split(' ', 2)[1][0].toUpperCase()
 
     const fullName = `${name} ${lastName}.`
     setTime(time)

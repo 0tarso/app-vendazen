@@ -1,11 +1,11 @@
-import { CustomerWithPurchases } from "../schemas/Customer/customer-schema"
+import { CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema"
 import api from "./api"
 
 export const getCustomersAPI = async () => {
 
   // console.log('customerAPI')
 
-  let response: CustomerWithPurchases[] | null = null
+  let response: CustomerWithPurchasesAndPayments[] | null = null
 
   const { data, status } = await api.get('/customers/list')
 

@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { CustomerWithPurchases } from '@/src/schemas/Customer/customer-schema'
+import { CustomerWithPurchasesAndPayments } from '@/src/schemas/Customer/customer-schema'
 import { COLORS } from '@/src/constants/Colors'
 
 interface CustomerCardProps {
-  customer: CustomerWithPurchases
+  customer: CustomerWithPurchasesAndPayments
   onPress: () => void
 }
 

@@ -14,9 +14,9 @@ export type CustomerListNavigationProp = StackNavigationProp<
 
 export default function CustomerList() {
   const navigation = useNavigation<CustomerListNavigationProp>()
-  const { customerWithPurchases } = useCustomer()
+  const { fullCustomerData } = useCustomer()
 
-  useEffect(() => { console.log(customerWithPurchases) })
+  useEffect(() => { console.log(fullCustomerData) })
 
   const handleNavigate = (customerId: string) => {
     console.log(customerId)
@@ -25,12 +25,12 @@ export default function CustomerList() {
 
   return (
     <View style={styles.container}>
-      {customerWithPurchases && (
+      {fullCustomerData && (
         <FlatList
           contentContainerStyle={{ paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={customerWithPurchases}
+          data={fullCustomerData}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <CustomerCard

@@ -56,7 +56,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.WhiteBackground,
+    backgroundColor: "#ffffff",
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 15,
