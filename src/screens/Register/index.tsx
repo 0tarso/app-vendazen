@@ -1,15 +1,5 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Keyboard, Alert, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Logo from '@/src/components/Logo'
-import { COLORS } from '@/src/constants/Colors'
-import CustomInput from '@/src/components/CustomInput'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AuthSchema, authSchema } from '@/src/schemas/authSchema'
-import CustomButton from '@/src/components/CustomButton'
-import { registerFinalSchema, RegisterSchema } from '@/src/schemas/registerSchema'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { AuthTabParamList } from '@/src/routes/auth.routes'
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
+import React from 'react'
 import RegisterForm from '@/src/components/FormRegister'
 
 export default function RegisterScreen() {

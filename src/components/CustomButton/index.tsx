@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { COLORS } from '@/src/constants/Colors'
-import { useAuth } from '@/src/contexts/AuthContext'
 
 interface CustomButtonProps {
   onPress: () => void

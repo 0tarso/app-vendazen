@@ -3,7 +3,7 @@ import { Animated, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 
-import { NavigationRoute, ParamListBase, TabNavigationState } from "@react-navigation/native";
+import { NavigationRoute, ParamListBase } from "@react-navigation/native";
 import { COLORS } from "@/src/constants/Colors";
 
 interface TabItemProps {

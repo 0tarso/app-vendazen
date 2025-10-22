@@ -8,9 +8,7 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import { COLORS } from "@/src/constants/Colors";
 import { styles } from "./styles";
-import { useCustomer } from "@/src/contexts/CustomerContext";
 
 const ITEM_HEIGHT = 40; // altura de cada número no scroll
 const SCREEN_HEIGHT = Dimensions.get("window").height;

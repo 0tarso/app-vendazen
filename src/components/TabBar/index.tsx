@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { COLORS } from '@/src/constants/Colors'
 import TabItem from '../TabItem'
 
 export default function TabBar(props: BottomTabBarProps) {

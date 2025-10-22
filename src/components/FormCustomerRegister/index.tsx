@@ -2,14 +2,12 @@ import { View, Text, StyleSheet, Keyboard, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import { useForm } from 'react-hook-form';
-import { authSchema, AuthSchema } from '@/src/schemas/authSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import CustomInput from '../CustomInput';
 import CustomButton from '../CustomButton';
 import { createCustomerSchema, CreateCustomerSchema } from '@/src/schemas/Customer/insert-customer-schema';
 import { useCustomer } from '@/src/contexts/CustomerContext';
 import { useNavigation } from '@react-navigation/native';
-import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 import { CustomerListNavigationProp } from '../CustomerList';
 
 export default function FormCustomerRegister() {

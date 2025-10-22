@@ -1,4 +1,4 @@
-import z, { number } from "zod";
+import z from "zod";
 
 export const paymentSchema = z.object({
   id: z.number(),
