@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   avatarContainer: {
-    backgroundColor: "green",
+    backgroundColor: COLORS.GreenPrimary,
     width: 40,
     height: 40,
     borderRadius: 50,

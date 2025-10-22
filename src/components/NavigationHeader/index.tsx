@@ -2,17 +2,19 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/src/constants/Colors'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { NavigationProp, useNavigation, useRoute } from '@react-navigation/native'
 import CustomDatePicker from '../CustomDatePicker'
 import { useCustomer } from '@/src/contexts/CustomerContext'
+import { RootTabParamList } from '@/src/routes/app.routes'
 
 interface NavigateHeaderProps {
   title: string
 }
 
 export default function NavigationHeader(props: NavigateHeaderProps) {
-  const { navigate, goBack } = useNavigation()
-  const { name } = useRoute()
+
+  const navigation = useNavigation<NavigationProp<RootTabParamList>>()
+  const { name: routeName } = useRoute()
 
   const { setFilterPurchasesDate } = useCustomer()
 
@@ -24,7 +26,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
     <View style={styles.container}>
       <View style={styles.navigationArea}>
         <TouchableOpacity hitSlop={10}
-          onPress={() => goBack()}
+          onPress={() => navigation.goBack()}
         >
           <Ionicons name='arrow-back-outline' size={26} color={COLORS.GreenPrimary} />
 
@@ -33,7 +35,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
 
       </View>
 
-      {name === 'purchases' && (
+      {routeName === 'purchases' && (
         <View style={{}}>
           <CustomDatePicker
             onChangeDate={(dateString) => handleSetFilterDate(dateString)}
@@ -41,9 +43,9 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
         </View>
       )}
 
-      {name === 'customer-list' && (
+      {routeName === 'customer-list' && (
         <TouchableOpacity
-          onPress={() => navigate('customer-register')}
+          onPress={() => (navigation as any).navigate('customers', { screen: 'customer-register' })}
         >
           <Ionicons name='person-add-outline' size={28} color={COLORS.GreenPrimary} />
         </TouchableOpacity>

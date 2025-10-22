@@ -36,7 +36,8 @@ export default function CustomerStackRoutes() {
 
       <Stack.Screen name="customer-register" component={CustomerRegister}
         options={{
-          headerShown: false
+          headerShown: false,
+
         }}
       />
 
