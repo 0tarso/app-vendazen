@@ -7,12 +7,14 @@ import CustomInput from '../CustomInput';
 import CustomButton from '../CustomButton';
 import { createCustomerSchema, CreateCustomerSchema } from '@/src/schemas/Customer/insert-customer-schema';
 import { useCustomer } from '@/src/contexts/CustomerContext';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CustomerListNavigationProp } from '../CustomerList';
+import { androidToast } from '@/src/utils/android-toast';
+import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 
 export default function FormCustomerRegister() {
 
-  const { navigate } = useNavigation<CustomerListNavigationProp>()
+  const { navigate } = useNavigation<NavigationProp<CustomerStackParamList>>()
   const { createCustomer, loadingCustomerData } = useCustomer()
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -48,7 +50,9 @@ export default function FormCustomerRegister() {
     const newUser = await createCustomer(data)
 
     if (newUser) {
-      navigate('customer-details', { customerId: newUser.id.toString() })
+      androidToast('Cliente Adicionado')
+
+      navigate('customer-list', { open: 'customer-list' })
     }
   };
 

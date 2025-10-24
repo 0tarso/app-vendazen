@@ -8,10 +8,14 @@ import CustomButton from '../CustomButton';
 import { useCustomer } from '@/src/contexts/CustomerContext';
 import { createPurchaseInput, CreatePurchaseInput, createPurchaseSchema, CreatePurchaseSchema } from '@/src/schemas/Purchase/purchase-schema';
 import CustomModalSelector from '../CustomModalSelector';
+import { androidToast } from '@/src/utils/android-toast';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootTabParamList } from '@/src/routes/app.routes';
 
 export default function FormPurchaseRegister() {
 
   const { createPurchase, loadingCustomerData, fullCustomerData } = useCustomer()
+  const { navigate } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
@@ -46,12 +50,13 @@ export default function FormPurchaseRegister() {
 
     try {
       await createPurchase(fullPurchase)
-      console.log('Venda adicionada com sucesso')
 
+      androidToast('Compra Adicionada!')
+
+      navigate('purchases')
     } catch (error) {
       console.log('erro')
     }
-
   };
 
 
