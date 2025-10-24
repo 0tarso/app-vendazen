@@ -23,14 +23,14 @@ export default function SpeedDialButton() {
   useEffect(() => {
     Animated.spring(rotate, {
       toValue: showAddNav ? 1 : 0,
-      useNativeDriver: true,
+      useNativeDriver: false,
       friction: 4,
       tension: 10,
     }).start();
 
     Animated.spring(translateY, {
-      toValue: showAddNav ? -170 : -30,
-      useNativeDriver: true,
+      toValue: showAddNav ? -170 : -20,
+      useNativeDriver: false,
       friction: 50,
       tension: 300,
     }).start();
@@ -40,15 +40,20 @@ export default function SpeedDialButton() {
 
   const handleShowAddNav = () => {
     setShowNavAdd(!showAddNav)
+    console.log('clique botao')
   }
 
 
   return (
     <View>
       <Animated.View style={{
+        position: 'absolute',
+        right: 20,
+        bottom: 70,
         transform: [{ translateY }],
-        zIndex: 200
-      }}>
+        zIndex: 200,
+      }}
+        pointerEvents={'box-none'}>
         <TouchableOpacity style={styles.addButton} onPress={handleShowAddNav}
           activeOpacity={0.8}
           hitSlop={30}
@@ -70,7 +75,9 @@ export default function SpeedDialButton() {
 
             <Text style={styles.addNavTitle}>Adicionar</Text>
 
-            <TouchableOpacity style={styles.addNavItem}>
+            <TouchableOpacity style={styles.addNavItem}
+              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'purchase-register' } })}
+            >
               <Ionicons name='cart-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Venda</Text>
             </TouchableOpacity>
@@ -81,7 +88,7 @@ export default function SpeedDialButton() {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.addNavItem}
-              onPress={() => (navigation as any).navigate('customers', { screen: 'customer-register' })}
+              onPress={() => navigation.navigate('customers', { screen: 'customer-register' })}
             >
               <Ionicons name='person-add-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Cliente</Text>
@@ -102,11 +109,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.GreenPrimary,
     borderRadius: 15,
     padding: 10,
-    position: 'absolute',
-    right: 20,
-    top: -60,
+    // position: 'absolute',
+    // right: 20,
+    // top: -60,
     elevation: 12,
-    zIndex: 201,
+    zIndex: 300,
     // borderBottomWidth: 2,
     borderColor: COLORS.GreenSecondary
   },

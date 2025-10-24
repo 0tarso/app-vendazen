@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { CustomerResponseSchema, CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema";
 import { getCustomersAPI } from "../api/get-customers";
-import { PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
+import { CreatePurchaseSchema, createPurchaseSchema, PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
 import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
@@ -9,6 +9,7 @@ import { nullable } from "zod";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
 import { insertCustomerAPI } from "../api/insert-customer";
 import { PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
+import { insertPurchaseAPI } from "../api/insert-purchase";
 
 interface CustomerContextType {
   totalSales: number,
@@ -23,6 +24,7 @@ interface CustomerContextType {
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
   getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
+  createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<void>
 
 }
 
@@ -160,6 +162,26 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     return newUser
   }
 
+  const createPurchase = async (purchaseData: CreatePurchaseSchema) => {
+    setLoadingCustomerData(true)
+
+    try {
+      const newPurchase = await insertPurchaseAPI(purchaseData)
+
+      if (!newPurchase) {
+        alert('Erro ao criar nova compra')
+        return
+      }
+      await getCustomerData()
+
+    } catch (error) {
+      console.log('Erro ao adicionar compra')
+      console.log(error)
+    } finally {
+      setLoadingCustomerData(false)
+    }
+  }
+
   const value: CustomerContextType = {
     fullCustomerData,
     getCustomerById,
@@ -172,6 +194,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     totalSales,
     // filterPurchases,
     createCustomer,
+    createPurchase,
     payments,
     lastPayments
   }

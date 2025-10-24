@@ -14,20 +14,25 @@ export default function SaleCard(props: SaleCardProps) {
   const [customerName, setCustomerName] = useState('')
 
   useEffect(() => {
-    const date = new Date(props.purchase.created_at)
-    const convertedDate = new Date(date).toLocaleDateString('pt-BR')
+    if (props.purchase) {
+      console.log(props.purchase)
+      const date = new Date(props.purchase.created_at)
+      const convertedDate = new Date(date).toLocaleDateString('pt-BR')
 
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const time = `${hours}:${minutes}`
+      const hours = date.getHours().toString().padStart(2, '0')
+      const minutes = date.getMinutes().toString().padStart(2, '0')
+      const time = `${hours}:${minutes}`
 
-    const name = props.purchase.customer_name.split(' ', 1)
-    const lastName = props.purchase.customer_name.split(' ', 2)[1][0].toUpperCase()
+      const nameParts = props.purchase.customer_name.split(' ');
+      const name = nameParts[0];
+      const lastNameInitial = nameParts.length > 1 ? nameParts[1][0].toUpperCase() : null;
 
-    const fullName = `${name} ${lastName}.`
-    setTime(time)
-    setDateToString(convertedDate)
-    setCustomerName(fullName)
+      const fullName = `${name} ${lastNameInitial ? lastNameInitial + '.' : ''}`
+      setTime(time)
+      setDateToString(convertedDate)
+      setCustomerName(fullName)
+    }
+
   }, [])
 
   return (
@@ -41,10 +46,8 @@ export default function SaleCard(props: SaleCardProps) {
         <Text style={styles.customerName}>{customerName}</Text>
       </View>
 
-      <View>
-        <Text style={{ textAlign: 'center' }}>{time}</Text>
-        <Text>{dateToString}</Text>
-      </View>
+      <Text style={styles.date}>{dateToString}</Text>
+      <Text style={styles.time}>{time}</Text>
     </View>
   )
 }
@@ -82,6 +85,20 @@ const styles = StyleSheet.create({
   },
   customerName: {
     fontFamily: 'MontserratRegular',
-    fontSize: 17
+    fontSize: 20,
+    textAlign: 'left',
+    color: COLORS.GreenPrimary
+  },
+  time: {
+    position: 'absolute',
+    bottom: 5,
+    left: 20,
+    color: COLORS.GrayFont
+  },
+  date: {
+    position: 'absolute',
+    bottom: 5,
+    right: 20,
+    color: COLORS.GrayFont
   }
 })

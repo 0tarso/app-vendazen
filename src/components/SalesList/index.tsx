@@ -40,7 +40,7 @@ export default function SalesList() {
 
     setPurchasesFiltered(filteringPurchases)
 
-  }, [filterPurchasesDate])
+  }, [filterPurchasesDate, purchases])
 
   const showAllPurchases = () => {
     setPurchasesFiltered(purchases)

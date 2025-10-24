@@ -1,0 +1,21 @@
+
+import { CreatePurchaseSchema, PurchaseSchema } from '../schemas/Purchase/purchase-schema'
+import api from './api'
+
+export const insertPurchaseAPI = async (purchaseData: CreatePurchaseSchema) => {
+
+
+  let newPurchase: PurchaseSchema | null = null
+
+  try {
+    const { data, status } = await api.post('/purchases', purchaseData)
+
+    if (data) newPurchase = data.content
+
+  } catch (error) {
+    console.log('Erro insertPurchaseAPI')
+  }
+
+
+  return newPurchase
+}

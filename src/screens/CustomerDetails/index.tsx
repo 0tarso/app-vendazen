@@ -36,7 +36,7 @@ export default function CustomerDetails() {
 
   return (
     <View>
-      <NavigationHeader title='Cliente' />
+      {/* <NavigationHeader title='Cliente' /> */}
 
       <ScrollView
         showsHorizontalScrollIndicator={false}

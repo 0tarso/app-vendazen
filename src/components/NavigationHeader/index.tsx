@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/src/constants/Colors'
 import { NavigationProp, useNavigation, useRoute } from '@react-navigation/native'
@@ -11,27 +11,46 @@ interface NavigateHeaderProps {
   title: string
 }
 
-export default function NavigationHeader(props: NavigateHeaderProps) {
+enum RouteTitle {
+  'customers' = 'Clientes',
+  'customer-list' = 'Lista de Clientes',
+  'customer-register' = 'Novo Cliente',
+  'purchases' = 'Compras',
+  'purchase-register' = 'Nova Compra',
+  'customer-details' = 'Detalhes do Cliente'
+}
 
+
+export default function NavigationHeader(props: NavigateHeaderProps) {
   const navigation = useNavigation<NavigationProp<RootTabParamList>>()
   const { name: routeName } = useRoute()
 
   const { setFilterPurchasesDate } = useCustomer()
 
+  const [headerTitle, setHeaderTitle] = useState('')
+
   const handleSetFilterDate = (date: string) => {
     setFilterPurchasesDate(date)
   }
+
+  useEffect(() => {
+    const route = RouteTitle[routeName as keyof typeof RouteTitle]
+    setHeaderTitle(route)
+  }, [routeName])
 
   return (
     <View style={styles.container}>
       <View style={styles.navigationArea}>
         <TouchableOpacity hitSlop={10}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            console.log('navwegando')
+            navigation.goBack()
+          }}
         >
           <Ionicons name='arrow-back-outline' size={26} color={COLORS.GreenPrimary} />
 
         </TouchableOpacity>
-        <Text style={styles.title}>{props.title}</Text>
+        <Text style={styles.title}>{headerTitle}</Text>
 
       </View>
 
