@@ -35,6 +35,9 @@ export const styles = StyleSheet.create({
     bottom: 250,
     width: '100%'
   },
+  visibleKeyboardButtonContainer: {
+    paddingHorizontal: 20
+  },
   backButtonContainer: {
     position: 'absolute',
     bottom: 200,

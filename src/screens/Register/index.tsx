@@ -25,7 +25,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: 'yellow',
-    paddingHorizontal: 20,
+    // paddingHorizontal: 10,
     flex: 1,
     // height:'',
     position: 'relative'

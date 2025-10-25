@@ -5,13 +5,24 @@ const actualMonth = today.getMonth()
 const actualYear = today.getFullYear()
 
 
-export const getTotalDebts = async (purchases: PurchaseWithCustomer[]) => {
+export const getTotalDebts = async (purchases: PurchaseWithCustomer[], period: "month" | "all-time") => {
+
   const totalDebts = purchases.reduce((acc, item) => {
     const purchaseDate = new Date(item.created_at)
-    const purchaseStatus = item.paid
+    const purchaseIsUnpaid = !item.paid
 
-    if (purchaseDate.getMonth() === actualMonth && purchaseDate.getFullYear() === actualYear && purchaseStatus === false) {
-      acc += item.amount
+    if (period === 'month') {
+      const sameMonth = purchaseDate.getMonth() === actualMonth && purchaseDate.getFullYear() === actualYear
+
+      if (sameMonth && purchaseIsUnpaid) {
+        return acc + item.remaining_amount
+      }
+
+      return acc
+    }
+
+    if (period === 'all-time' && purchaseIsUnpaid) {
+      return acc + item.remaining_amount
     }
 
     return acc

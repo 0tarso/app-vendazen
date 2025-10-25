@@ -85,7 +85,7 @@ export default function FormPaymentRegister() {
 
       androidToast('Pagamento Feito!')
 
-      // navigate('purchases')
+      navigate('home')
     } catch (error) {
       console.log('erro')
     }

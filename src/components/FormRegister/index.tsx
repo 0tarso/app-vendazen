@@ -180,7 +180,7 @@ export default function RegisterForm() {
       {isKeyboardVisible && (
         <>
           {step === 1 && (
-            <View>
+            <View style={styles.visibleKeyboardButtonContainer}>
               <CustomButton
                 isDisabled={false}
                 label='Próximo'
@@ -191,7 +191,7 @@ export default function RegisterForm() {
           )}
 
           {step === 2 && (
-            <View>
+            <View style={styles.visibleKeyboardButtonContainer}>
               <CustomButton
                 isDisabled={false}
                 label='Próximo'
@@ -202,7 +202,7 @@ export default function RegisterForm() {
           )}
 
           {step === 3 && (
-            <View>
+            <View style={styles.visibleKeyboardButtonContainer}>
               <CustomButton
                 isDisabled={false}
                 label='Finalizar'
