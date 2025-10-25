@@ -82,13 +82,15 @@ export default function SpeedDialButton() {
               <Text style={styles.addNavItemText}>Venda</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.addNavItem}>
+            <TouchableOpacity style={styles.addNavItem}
+              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'payment-register' } })}
+            >
               <Ionicons name='cash-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Pagamento</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.addNavItem}
-              onPress={() => navigation.navigate('customers', { screen: 'customer-register' })}
+              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'customer-register' } })}
             >
               <Ionicons name='person-add-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Cliente</Text>

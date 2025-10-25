@@ -15,4 +15,15 @@ export const paymentWithCustomerName = paymentSchema.extend({
   customer_name: z.string()
 })
 
+
+export const createPaymentSchema = z.object({
+  amount:
+    z.coerce.number('Valor inválido')
+      .refine(
+        (val) => /^\d+(\.\d{1,2})?$/.test(val.toString()),
+        { message: 'O valor deve ter no máximo 2 casas decimais' }
+      )
+})
+export type CreatePaymentSchema = z.infer<typeof createPaymentSchema>
+
 export type PaymentWithCustomerName = PaymentSchema & { customer_name: string }

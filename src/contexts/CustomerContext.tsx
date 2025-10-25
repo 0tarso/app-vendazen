@@ -8,8 +8,9 @@ import { getTotalDebts } from "../utils/get-total-debts";
 import { nullable } from "zod";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
 import { insertCustomerAPI } from "../api/insert-customer";
-import { PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
+import { CreatePaymentSchema, PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
 import { insertPurchaseAPI } from "../api/insert-purchase";
+import { insertPaymentAPI } from "../api/insert-payment";
 
 interface CustomerContextType {
   totalSales: number,
@@ -24,7 +25,8 @@ interface CustomerContextType {
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
   getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
-  createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<void>
+  createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<void>,
+  createPayment: (customerId: number, paymentAmount: number) => Promise<void>
 
 }
 
@@ -162,6 +164,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     return newUser
   }
 
+
   const createPurchase = async (purchaseData: CreatePurchaseSchema) => {
     setLoadingCustomerData(true)
 
@@ -182,6 +185,23 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     }
   }
 
+
+  const createPayment = async (customerId: number, paymentAmount: number) => {
+    setLoadingCustomerData(true)
+
+    try {
+      const newPayment = await insertPaymentAPI(customerId, paymentAmount)
+
+      if (!newPayment) {
+        alert('Erro ao criar pagamento')
+      }
+    } catch (error) {
+      console.log('Erro:', error)
+    } finally {
+      setLoadingCustomerData(false)
+    }
+  }
+
   const value: CustomerContextType = {
     fullCustomerData,
     getCustomerById,
@@ -195,6 +215,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     // filterPurchases,
     createCustomer,
     createPurchase,
+    createPayment,
     payments,
     lastPayments
   }
