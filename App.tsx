@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { UserProvider } from './src/contexts/UserDataContext';
 import { CustomerProvider } from './src/contexts/CustomerContext';
+import { ThemeProvider } from './src/contexts/ThemeContext';
 
 export default function App() {
 
@@ -37,13 +38,15 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <AuthProvider>
-        <UserProvider>
-          <CustomerProvider>
-            <Routes />
-          </CustomerProvider>
-        </UserProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <UserProvider>
+            <CustomerProvider>
+              <Routes />
+            </CustomerProvider>
+          </UserProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </View>
   );
 }

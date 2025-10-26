@@ -3,7 +3,7 @@ import React from 'react'
 import { styles } from './styles'
 import HomeHeader from '@/src/components/HomeHeader'
 import LastPurchaseList from '@/src/components/PurchaseList'
-import SalesSummary from '@/src/components/SalesSummary'
+import SummaryCards from '@/src/components/SalesSummary'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 import { COLORS } from '@/src/constants/Colors'
 
@@ -28,7 +28,8 @@ export default function HomeScreen() {
             purchases={lastPurchases}
           />
 
-          <SalesSummary
+          <SummaryCards
+            title='Resumo Mensal'
             debtsValue={totalDebts}
             salesValue={totalSales}
           />

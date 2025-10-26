@@ -6,7 +6,11 @@ import { ScaleInView } from '../ScaleInView'
 import { COLORS } from '@/src/constants/Colors'
 import { RootTabParamList } from '@/src/routes/app.routes'
 
-export default function SpeedDialButton() {
+interface SpeedDialProps {
+  customerId?: number
+}
+
+export default function SpeedDialButton(props: SpeedDialProps) {
 
   const navigation = useNavigation<NavigationProp<RootTabParamList>>()
 
@@ -76,21 +80,33 @@ export default function SpeedDialButton() {
             <Text style={styles.addNavTitle}>Adicionar</Text>
 
             <TouchableOpacity style={styles.addNavItem}
-              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'purchase-register' } })}
+              onPress={() => navigation.navigate('customers',
+                {
+                  screen: 'customer-list',
+                  params: { open: 'purchase-register', customerId: props.customerId ?? null }
+                })}
             >
               <Ionicons name='cart-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Venda</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.addNavItem}
-              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'payment-register' } })}
+              onPress={() => navigation.navigate('customers',
+                {
+                  screen: 'customer-list',
+                  params: { open: 'payment-register', customerId: props.customerId ?? null }
+                })}
             >
               <Ionicons name='cash-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Pagamento</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.addNavItem}
-              onPress={() => navigation.navigate('customers', { screen: 'customer-list', params: { open: 'customer-register' } })}
+              onPress={() => navigation.navigate('customers',
+                {
+                  screen: 'customer-list',
+                  params: { open: 'customer-register' }
+                })}
             >
               <Ionicons name='person-add-outline' size={32} color={COLORS.GreenPrimary} />
               <Text style={styles.addNavItemText}>Cliente</Text>

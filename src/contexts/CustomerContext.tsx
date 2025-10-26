@@ -109,9 +109,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
         )
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-      const totalSales = await getTotalSales(purchases, 'month')
+      const totalSales = getTotalSales(purchases, 'month')
 
-      const totalDebts = await getTotalDebts(purchases, 'month')
+      const totalDebts = getTotalDebts(purchases, 'month')
 
       const lastPurchases = purchases.slice(0, 5)
       const lastPayments = payments.slice(0, 5)

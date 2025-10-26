@@ -15,7 +15,7 @@ enum RouteTitle {
   'customers' = 'Clientes',
   'customer-list' = 'Lista de Clientes',
   'customer-register' = 'Novo Cliente',
-  'purchases' = 'Compras',
+  'purchases' = 'Lista de Vendas',
   'purchase-register' = 'Nova Compra',
   'customer-details' = 'Detalhes do Cliente',
   'payment-register' = 'Adicionar Pagamento'

@@ -7,12 +7,13 @@ import SalesSummaryCard from '../SalesSummaryCard'
 interface SalesSummaryProps {
   salesValue: number
   debtsValue: number
+  title: string
 }
 
-export default function SalesSummary(props: SalesSummaryProps) {
+export default function SummaryCards(props: SalesSummaryProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Resumo Mensal</Text>
+      <Text style={styles.text}>{props.title}</Text>
 
       <SalesSummaryCard
         type='sales'
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   },
   text: {
     // paddingHorizontal: 20,
-    fontSize: 26,
+    fontSize: 24,
     fontFamily: 'MontserratRegular',
     color: COLORS.GrayFont
   }

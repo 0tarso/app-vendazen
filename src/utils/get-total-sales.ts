@@ -4,7 +4,7 @@ const today = new Date()
 const actualMonth = today.getMonth()
 const actualYear = today.getFullYear()
 
-export const getTotalSales = async (purchases: PurchaseSchema[], period: "month" | "all-time") => {
+export const getTotalSales = (purchases: PurchaseSchema[], period: "month" | "all-time") => {
 
   const totalSales = purchases.reduce((acc, item) => {
     const purchaseDate = new Date(item.created_at)

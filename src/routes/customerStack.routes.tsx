@@ -10,11 +10,11 @@ import PaymentRegister from "../screens/PaymentRegister";
 const Stack = createStackNavigator<CustomerStackParamList>()
 
 export type CustomerStackParamList = {
-  'customer-list': { open: string };
+  'customer-list': { open: string, customerId?: number | null };
   'customer-details': { customerId: string };
   'customer-register': undefined;
   'purchase-register': undefined;
-  'payment-register': undefined
+  'payment-register': undefined;
 };
 
 export default function CustomerStackRoutes() {

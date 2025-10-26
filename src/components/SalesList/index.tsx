@@ -49,6 +49,7 @@ export default function SalesList() {
   return (
     <View style={{ flex: 1 }}>
 
+
       {purchasesFiltered && purchasesFiltered.length > 0 ? (
         <FlatList
           data={purchasesFiltered}

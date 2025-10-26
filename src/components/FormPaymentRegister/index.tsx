@@ -122,7 +122,7 @@ export default function FormPaymentRegister() {
         <View style={{ marginTop: 120 }}>
           <CustomButton
             isDisabled={false}
-            label='Pagar'
+            label='Receber'
             onPress={handleSubmit(onSubmit)}
             loading={loadingCustomerData}
           />

@@ -10,9 +10,11 @@ import Logo from '../Logo';
 import CustomInput from '../CustomInput';
 import CustomButton from '../CustomButton';
 import { useAuth } from '@/src/contexts/AuthContext';
+import { useTheme } from '@/src/contexts/ThemeContext';
 
 export default function FormLogin() {
   const { login, loadingAuth } = useAuth()
+  const { toggleTheme } = useTheme()
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);

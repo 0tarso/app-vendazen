@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingHorizontal: 20,
-    fontSize: 26,
+    fontSize: 24,
     fontFamily: 'MontserratRegular',
     color: COLORS.GrayFont
   },

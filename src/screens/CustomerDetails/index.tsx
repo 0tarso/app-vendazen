@@ -4,10 +4,13 @@ import { RouteProp, useRoute } from '@react-navigation/native'
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 import { useCustomer } from '@/src/contexts/CustomerContext';
 import { CustomerWithPurchasesAndPayments } from '@/src/schemas/Customer/customer-schema';
-import NavigationHeader from '@/src/components/NavigationHeader';
 import CustomerTitle from '@/src/components/CustomerName';
 import LastPurchaseList from '@/src/components/PurchaseList';
-import { PurchaseSchema } from '@/src/schemas/Purchase/purchase-schema';
+import { PurchaseSchema, PurchaseWithCustomer } from '@/src/schemas/Purchase/purchase-schema';
+import SummaryCards from '@/src/components/SalesSummary';
+import { getTotalDebts } from '@/src/utils/get-total-debts';
+import { getTotalSales } from '@/src/utils/get-total-sales';
+import { PaymentSchema } from '@/src/schemas/Payment/payment-schema';
 
 
 type CustomerDetailsRouteProp = RouteProp<CustomerStackParamList, 'customer-details'>;
@@ -19,7 +22,14 @@ export default function CustomerDetails() {
   const { getCustomerById } = useCustomer()
 
   const [customer, setCustomer] = useState<CustomerWithPurchasesAndPayments | null>(null)
+
+  const [purchase, setPurchases] = useState<PurchaseSchema[] | null>(null)
   const [lastPurchases, setLastPurchases] = useState<PurchaseSchema[] | null>(null)
+
+  const [payments, setPayments] = useState<PaymentSchema[] | null>(null)
+
+  const [totalDebts, setTotalDebts] = useState(0)
+  const [totalPurchases, setTotalPurchases] = useState(0)
 
   useEffect(() => {
     const customerData = getCustomerById(customerId)
@@ -30,7 +40,16 @@ export default function CustomerDetails() {
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .slice(0, 5);
 
-    setLastPurchases(lastFivePurchases);
+
+    const totalDebts = getTotalDebts(customerData.purchases, 'all-time')
+    const totalPurchases = getTotalSales(customerData.purchases, 'all-time')
+
+
+    setTotalDebts(totalDebts)
+    setTotalPurchases(totalPurchases)
+    setLastPurchases(lastFivePurchases)
+    setPurchases(customerData.purchases)
+    setPayments(customerData.payments)
     setCustomer(customerData)
   }, [customerId])
 
@@ -49,6 +68,12 @@ export default function CustomerDetails() {
 
         <LastPurchaseList
           purchases={lastPurchases && lastPurchases}
+        />
+
+        <SummaryCards
+          title='Resumo do Cliente'
+          debtsValue={totalDebts}
+          salesValue={totalPurchases}
         />
 
       </ScrollView>
