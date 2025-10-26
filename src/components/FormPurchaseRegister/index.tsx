@@ -15,7 +15,7 @@ import { RootTabParamList } from '@/src/routes/app.routes';
 export default function FormPurchaseRegister() {
 
   const { createPurchase, loadingCustomerData, fullCustomerData } = useCustomer()
-  const { navigate } = useNavigation<NavigationProp<RootTabParamList>>()
+  const { navigate, reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
@@ -53,15 +53,19 @@ export default function FormPurchaseRegister() {
     const fullPurchase = { ...data, customer_id: customerSelectedId }
     console.log(fullPurchase)
 
-    try {
-      await createPurchase(fullPurchase)
 
-      androidToast('Compra Adicionada!')
+    const isNewPurchaseCreated = await createPurchase(fullPurchase)
 
-      navigate('purchases')
-    } catch (error) {
-      console.log('erro')
+    if (!isNewPurchaseCreated) {
+      androidToast('Erro ao adicionar compra. Tente novamente.')
+      return
     }
+
+    androidToast('Compra registrada com sucesso!')
+    resetHistory({
+      index: 0,
+      routes: [{ name: 'home' }],
+    })
   };
 
 
@@ -85,6 +89,7 @@ export default function FormPurchaseRegister() {
 
       <View>
         <CustomModalSelector
+          placeholder='Selecione o cliente'
           data={customersList ?? []}
           onChange={(key, label) => setCustomerSelectedId(key)}
         />

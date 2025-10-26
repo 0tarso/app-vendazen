@@ -13,13 +13,30 @@ import { useCustomer } from '@/src/contexts/CustomerContext';
 import { useForm } from 'react-hook-form';
 import { createPaymentSchema, CreatePaymentSchema } from '@/src/schemas/Payment/payment-schema';
 import { getCustomerTotalDebt } from '@/src/utils/get-total-customer-debt';
+import { PaymentMethod } from '../ListItemCard';
 
 export default function FormPaymentRegister() {
+  const paymentMethods = [
+    { key: 1, label: PaymentMethod['PIX' as keyof typeof PaymentMethod] },
+    { key: 2, label: PaymentMethod['CASH' as keyof typeof PaymentMethod] },
+    { key: 3, label: PaymentMethod['DEBIT CARD' as keyof typeof PaymentMethod] },
+    { key: 4, label: PaymentMethod['CREDIT CARD' as keyof typeof PaymentMethod] },
+  ]
+  // const paymentMethods = [
+  //   { key: 1, label: 'PIX' },
+  //   { key: 2, label: 'DEBIT CARD' },
+  //   { key: 3, label: 'CREDIT CARD' },
+  //   { key: 4, label: 'CASH' },
+  // ]
+
+
   const { createPayment, loadingCustomerData, fullCustomerData } = useCustomer()
-  const { navigate } = useNavigation<NavigationProp<RootTabParamList>>()
+  const { navigate, reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
+
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null)
 
   const [customerDebt, setCustomerDebt] = useState<number | null>(null)
 
@@ -49,8 +66,9 @@ export default function FormPaymentRegister() {
 
 
     return () => {
-      setCustomerSelectedId(null)
-      reset()
+      // setCustomerSelectedId(null)
+      // setPaymentMethod(null)
+      // reset()
     }
   }, [fullCustomerData, customerSelectedId])
 
@@ -68,7 +86,12 @@ export default function FormPaymentRegister() {
       return;
     }
 
-    if (!customerDebt) {
+    if (paymentMethod === null) {
+      androidToast('Selecione a forma de pagamento')
+      return
+    }
+
+    if (customerDebt === 0 || customerDebt === null) {
       androidToast('Cliente não tem dívidas')
       return
     }
@@ -80,20 +103,27 @@ export default function FormPaymentRegister() {
 
     const fullPayment = {
       customerId: customerSelectedId,
-      paymentAmount: data.amount
+      paymentAmount: data.amount,
+      paymentMethod: paymentMethod
     }
 
     console.log(fullPayment)
 
-    try {
-      await createPayment(customerSelectedId, data.amount)
 
-      androidToast('Pagamento Feito!')
+    const isPaymentCreated = await createPayment(customerSelectedId, data.amount, paymentMethod)
 
-      navigate('customers', { screen: 'customer-list', params: { open: 'customer-list' } })
-    } catch (error) {
-      console.log('erro')
+    if (!isPaymentCreated) {
+      androidToast('Erro ao criar pagamento. Tente novamente.')
+      return
     }
+
+    androidToast('Pagamento Feito!')
+
+    resetHistory({
+      index: 0,
+      routes: [{ name: 'home' }],
+    })
+
   };
 
 
@@ -115,16 +145,26 @@ export default function FormPaymentRegister() {
 
       </View>
 
-      <View>
+      <View style={{ rowGap: 30 }}>
         <CustomModalSelector
+          placeholder='Selecione um cliente'
           data={customersList ?? []}
           onChange={(key, label) => setCustomerSelectedId(key)}
+        />
+
+        <CustomModalSelector
+          placeholder='Selecione o tipo de pagamento'
+          data={paymentMethods ?? []}
+          onChange={(key, label) => {
+            console.log(label)
+            setPaymentMethod(label)
+          }}
         />
       </View>
 
 
       <>
-        <View style={{ marginTop: 120 }}>
+        <View style={{ marginTop: 70 }}>
           <CustomButton
             isDisabled={false}
             label='Receber'

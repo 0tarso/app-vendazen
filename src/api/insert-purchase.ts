@@ -14,6 +14,7 @@ export const insertPurchaseAPI = async (purchaseData: CreatePurchaseSchema) => {
 
   } catch (error) {
     console.log('Erro insertPurchaseAPI')
+    throw error
   }
 
 

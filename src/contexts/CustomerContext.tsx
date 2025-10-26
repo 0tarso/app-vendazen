@@ -25,8 +25,8 @@ interface CustomerContextType {
   setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
   getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
-  createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<void>,
-  createPayment: (customerId: number, paymentAmount: number) => Promise<void>
+  createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<boolean>,
+  createPayment: (customerId: number, paymentAmount: number, paymentMethod: string) => Promise<boolean>
 
 }
 
@@ -168,40 +168,54 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const createPurchase = async (purchaseData: CreatePurchaseSchema) => {
     setLoadingCustomerData(true)
 
+    let response = false
+
     try {
       const newPurchase = await insertPurchaseAPI(purchaseData)
 
       if (!newPurchase) {
-        alert('Erro ao criar nova compra')
-        return
+        return response = false
       }
+
       await getCustomerData()
+
+      return response = true
 
     } catch (error) {
       console.log('Erro ao adicionar compra')
       console.log(error)
+
     } finally {
       setLoadingCustomerData(false)
     }
+
+    return response
   }
 
 
-  const createPayment = async (customerId: number, paymentAmount: number) => {
+  const createPayment = async (customerId: number, paymentAmount: number, paymentMethod: string) => {
     setLoadingCustomerData(true)
 
-    try {
-      const newPayment = await insertPaymentAPI(customerId, paymentAmount)
+    let response = false
 
-      if (!newPayment) {
+    try {
+      response = await insertPaymentAPI(customerId, paymentAmount, paymentMethod)
+
+      if (!response) {
         alert('Erro ao criar pagamento')
+        return response
       }
 
       await getCustomerData()
+
     } catch (error) {
       console.log('Erro:', error)
+
     } finally {
       setLoadingCustomerData(false)
     }
+
+    return response
   }
 
   const value: CustomerContextType = {

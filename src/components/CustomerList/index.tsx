@@ -16,7 +16,7 @@ export default function CustomerList() {
   const navigation = useNavigation<CustomerListNavigationProp>()
   const { fullCustomerData } = useCustomer()
 
-  useEffect(() => { console.log(fullCustomerData) })
+  useEffect(() => { console.log("Total de cliente => ", fullCustomerData?.length) })
 
   const handleNavigate = (customerId: string) => {
     console.log(customerId)

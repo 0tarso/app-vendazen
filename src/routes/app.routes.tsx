@@ -6,11 +6,13 @@ import TabBar from '../components/TabBar';
 import NavigationHeader from '../components/NavigationHeader';
 import CustomerStackRoutes, { CustomerStackParamList } from './customerStack.routes';
 import { NavigatorScreenParams } from '@react-navigation/native';
+import PaymentsScreen from '../screens/Payments';
 
 export type RootTabParamList = {
   Root: undefined;
   home: undefined;
   purchases: undefined;
+  payments: undefined;
   customers: NavigatorScreenParams<CustomerStackParamList>;
 }
 
@@ -34,6 +36,10 @@ export default function AppRoutes() {
       <Tab.Screen name='purchases' component={PurchasesScreen} options={{
         tabBarLabel: 'vendas',
         header: () => <NavigationHeader title='Vendas' />
+      }} />
+      <Tab.Screen name='payments' component={PaymentsScreen} options={{
+        tabBarLabel: 'pagamentos',
+        header: () => <NavigationHeader title='Pagamentos' />
       }} />
       <Tab.Screen name='customers' component={CustomerStackRoutes} options={{
         tabBarLabel: 'clientes',

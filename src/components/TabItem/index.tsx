@@ -22,7 +22,7 @@ export default function TabItem({ state, descriptors, navigation, route, index }
     "home": "home-outline",
     "customers": "people-outline",
     "purchases": "bag-check-outline",
-    // "projetos": "folder-outline",
+    "payments": "cash-outline",
   }[route.name] || "ellipse-outline";
 
   const isFocused = state.index === index;

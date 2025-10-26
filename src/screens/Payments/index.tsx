@@ -3,13 +3,15 @@ import React from 'react'
 import ListItems from '@/src/components/ListItems'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 
-export default function PurchasesScreen() {
+export default function PaymentsScreen() {
+  const { payments } = useCustomer()
 
-  const { purchases } = useCustomer()
 
   return (
     <View style={{ flex: 1, paddingHorizontal: 15 }}>
-      <ListItems purchases={purchases ?? []} />
+      <ListItems
+        payments={payments ?? []}
+      />
     </View>
   )
 }
