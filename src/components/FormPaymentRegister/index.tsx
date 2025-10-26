@@ -47,6 +47,11 @@ export default function FormPaymentRegister() {
       }
     }
 
+
+    return () => {
+      setCustomerSelectedId(null)
+      reset()
+    }
   }, [fullCustomerData, customerSelectedId])
 
 
@@ -85,7 +90,7 @@ export default function FormPaymentRegister() {
 
       androidToast('Pagamento Feito!')
 
-      navigate('home')
+      navigate('customers', { screen: 'customer-list', params: { open: 'customer-list' } })
     } catch (error) {
       console.log('erro')
     }

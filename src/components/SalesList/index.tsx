@@ -6,11 +6,16 @@ import { PurchaseWithCustomer } from '@/src/schemas/Purchase/purchase-schema'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/src/constants/Colors'
 import CustomButton from '../CustomButton'
+import CustomDatePicker from '../CustomDatePicker'
 
 export default function SalesList() {
-  const { purchases, filterPurchasesDate } = useCustomer()
+
+
+  const { purchases } = useCustomer()
 
   const [purchasesFiltered, setPurchasesFiltered] = useState<PurchaseWithCustomer[] | null>(null)
+
+  const [filterPurchaseDate, setFilterPurchaseDate] = useState<string>(new Date().toISOString())
 
 
   useEffect(() => {
@@ -20,41 +25,49 @@ export default function SalesList() {
       const purchaseDate = new Date(purchase.created_at);
       purchaseDate.setHours(0, 0, 0, 0)
 
-      const dateFilter = new Date(filterPurchasesDate)
+      const dateFilter = new Date(filterPurchaseDate)
       dateFilter.setHours(0, 0, 0, 0)
-
-      console.log('Purchase date -> ', purchaseDate)
-      console.log('DataFItler -> ', dateFilter)
 
       return purchaseDate.getFullYear() === dateFilter.getFullYear() &&
         purchaseDate.getMonth() === dateFilter.getMonth() &&
-        purchaseDate.getDay() === dateFilter.getDay()
+        purchaseDate.getDate() === dateFilter.getDate()
     })
 
-    console.log(filteringPurchases)
 
-    if (!filteringPurchases) {
+    if (!filteringPurchases || filteringPurchases?.length === 0) {
       setPurchasesFiltered(null)
       return
     }
 
     setPurchasesFiltered(filteringPurchases)
 
-  }, [filterPurchasesDate, purchases])
+  }, [filterPurchaseDate, purchases])
 
   const showAllPurchases = () => {
     setPurchasesFiltered(purchases)
   }
 
+  const handleSetFilterDate = (date: string) => {
+    setFilterPurchaseDate(date)
+  }
+
   return (
     <View style={{ flex: 1 }}>
-
+      <View style={{
+        position: 'absolute',
+        bottom: 30
+      }}>
+        <CustomDatePicker
+          onChangeDate={(dateString) => handleSetFilterDate(dateString)}
+        />
+      </View>
 
       {purchasesFiltered && purchasesFiltered.length > 0 ? (
         <FlatList
           data={purchasesFiltered}
           renderItem={({ item }) => <SaleCard purchase={item} />}
           keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ paddingBottom: 80 }}
         />
       ) : (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

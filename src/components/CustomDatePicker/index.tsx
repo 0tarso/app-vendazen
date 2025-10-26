@@ -183,6 +183,7 @@ export default function CustomDatePicker(props: CustomDatePickerProps) {
             </View>
           </View>
         </View>
+
       </Modal>
     </View>
   );

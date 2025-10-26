@@ -36,8 +36,6 @@ export default function CustomerStackRoutes() {
 
       <Stack.Screen name="customer-register" component={CustomerRegister} />
 
-
-
     </Stack.Navigator>
   )
 

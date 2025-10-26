@@ -52,7 +52,7 @@ export default function SpeedDialButton(props: SpeedDialProps) {
     <View>
       <Animated.View style={{
         position: 'absolute',
-        right: 20,
+        right: 17,
         bottom: 70,
         transform: [{ translateY }],
         zIndex: 200,

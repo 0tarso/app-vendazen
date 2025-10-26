@@ -23,16 +23,12 @@ enum RouteTitle {
 
 
 export default function NavigationHeader(props: NavigateHeaderProps) {
+
   const navigation = useNavigation<NavigationProp<RootTabParamList>>()
+
   const { name: routeName } = useRoute()
 
-  const { setFilterPurchasesDate } = useCustomer()
-
   const [headerTitle, setHeaderTitle] = useState('')
-
-  const handleSetFilterDate = (date: string) => {
-    setFilterPurchasesDate(date)
-  }
 
   useEffect(() => {
     const route = RouteTitle[routeName as keyof typeof RouteTitle]
@@ -55,14 +51,6 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
 
       </View>
 
-      {routeName === 'purchases' && (
-        <View style={{}}>
-          <CustomDatePicker
-            onChangeDate={(dateString) => handleSetFilterDate(dateString)}
-          />
-        </View>
-      )}
-
       {routeName === 'customer-list' && (
         <TouchableOpacity
           onPress={() => (navigation as any).navigate('customers', { screen: 'customer-register' })}
@@ -70,6 +58,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
           <Ionicons name='person-add-outline' size={28} color={COLORS.GreenPrimary} />
         </TouchableOpacity>
       )}
+
     </View>
   )
 

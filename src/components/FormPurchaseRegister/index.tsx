@@ -31,6 +31,11 @@ export default function FormPurchaseRegister() {
       setCustomersList(data)
     }
 
+    return () => {
+      setCustomerSelectedId(null)
+      reset()
+    }
+
   }, [fullCustomerData])
 
 

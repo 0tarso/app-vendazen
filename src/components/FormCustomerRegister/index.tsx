@@ -32,6 +32,8 @@ export default function FormCustomerRegister() {
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
+
+      reset()
     };
   }, [])
 

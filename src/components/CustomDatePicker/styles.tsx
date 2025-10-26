@@ -7,16 +7,18 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: 'red'
+    // backgroundColor: COLORS.GreenPrimary
   },
   openButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLORS.GreenPrimary,
+    borderRadius: 15,
+    // borderWidth: 1,
+    // borderColor: COLORS.GreenSecondary,
+    backgroundColor: COLORS.GreenPrimary,
+    elevation: 10
   },
-  openButtonText: { color: COLORS.GreenPrimary, fontSize: 16 },
+  openButtonText: { color: "#fff", fontSize: 16, fontFamily: 'MontserratRegular' },
   modalOverlay: {
     // zIndex: 20,
     flex: 1,
