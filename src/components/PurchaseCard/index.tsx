@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: COLORS.GreenSecondary,
     borderWidth: 2,
-    elevation: 5,
+    elevation: 1,
     marginBottom: 10
   },
   purchaseValue: {

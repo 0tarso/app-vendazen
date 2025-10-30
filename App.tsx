@@ -7,6 +7,8 @@ import { AuthProvider } from './src/contexts/AuthContext';
 import { UserProvider } from './src/contexts/UserDataContext';
 import { CustomerProvider } from './src/contexts/CustomerContext';
 import { ThemeProvider } from './src/contexts/ThemeContext';
+import ToastManager, { Toast } from 'toastify-react-native'
+import { toastConfig } from './src/components/Toast';
 
 export default function App() {
 
@@ -42,6 +44,14 @@ export default function App() {
         <AuthProvider>
           <UserProvider>
             <CustomerProvider>
+              <ToastManager
+                config={toastConfig}
+                showProgressBar={true}
+                position='top'
+                topOffset={40}
+                duration={5200}
+                useModal={false}
+              />
               <Routes />
             </CustomerProvider>
           </UserProvider>

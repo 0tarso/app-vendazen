@@ -18,7 +18,7 @@ api.interceptors.request.use(async (config) => {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
   } catch (error) {
-    console.error('Falha ao obter o token do SecureStore', error);
+    console.error('Falha ao obter o token', error);
   }
 
   return config

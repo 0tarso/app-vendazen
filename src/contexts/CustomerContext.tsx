@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CustomerResponseSchema, CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema";
 import { getCustomersAPI } from "../api/get-customers";
 import { CreatePurchaseSchema, createPurchaseSchema, PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
@@ -11,8 +11,12 @@ import { insertCustomerAPI } from "../api/insert-customer";
 import { CreatePaymentSchema, PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
 import { insertPurchaseAPI } from "../api/insert-purchase";
 import { insertPaymentAPI } from "../api/insert-payment";
+import { Toast } from "toastify-react-native";
 
 interface CustomerContextType {
+  loadingCreateCustomer: boolean,
+  loadingPayment: boolean,
+  loadingPurchase: boolean,
   totalSales: number,
   totalDebts: number,
   payments: PaymentWithCustomerName[] | null,
@@ -21,13 +25,10 @@ interface CustomerContextType {
   lastPurchases: PurchaseSchema[] | null,
   fullCustomerData: CustomerWithPurchasesAndPayments[] | null,
   loadingCustomerData: boolean,
-  filterPurchasesDate: string,
-  setFilterPurchasesDate: React.Dispatch<React.SetStateAction<string>>
   getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
   createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<boolean>,
   createPayment: (customerId: number, paymentAmount: number, paymentMethod: string) => Promise<boolean>
-
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -45,8 +46,6 @@ export function useCustomer() {
 export function CustomerProvider({ children }: { children: ReactNode }) {
   const { userLogged } = useAuth()
 
-  const [filterPurchasesDate, setFilterPurchasesDate] = useState(new Date().toISOString())
-
   const [fullCustomerData, setFullCustomerData] = useState<CustomerWithPurchasesAndPayments[] | null>(null)
 
   const [totalSales, setTotalSales] = useState<number>(0)
@@ -58,7 +57,13 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [payments, setPayments] = useState<PaymentWithCustomerName[] | null>(null)
   const [lastPayments, setLastPayments] = useState<PaymentWithCustomerName[] | null>(null)
 
+
+  // atualizar nos forms as variaveis de carregamento
+  // cada function terá seu próprio loading 
   const [loadingCustomerData, setLoadingCustomerData] = useState(true)
+  const [loadingCreateCustomer, setLoadingCreateCustomer] = useState(false)
+  const [loadingPurchase, setLoadingPurchase] = useState(false)
+  const [loadingPayment, setLoadingPayment] = useState(false)
 
   useEffect(() => {
     if (!userLogged) {
@@ -72,7 +77,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
     const fetch = async () => {
       console.log('CustomerProvider => Buscando dados')
-      await getCustomerData()
+      await fetchCustomersData()
     }
 
     fetch()
@@ -80,7 +85,11 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   }, [userLogged])
 
 
-  const getCustomerData = async () => {
+  const fetchCustomersData = useCallback(async () => {
+
+    console.log('Buscanod dados')
+
+    setLoadingCustomerData(true)
 
     try {
       const customersData = await getCustomersAPI()
@@ -130,54 +139,48 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoadingCustomerData(false)
     }
-  }
+  }, [])
 
 
-  const getCustomerById = (customerId: string) => {
+  const getCustomerById = useCallback((customerId: string) =>
 
-    const customer = fullCustomerData?.filter((customer) => customer.id.toString() === customerId)[0]
+    fullCustomerData?.find((customer) => customer.id.toString() === customerId) || null,
+    [fullCustomerData]
+  )
 
-    if (!customer) return null
-
-    return customer
-  }
-
-  const createCustomer = async (userData: CreateCustomerSchema) => {
+  const createCustomer = useCallback(async (userData: CreateCustomerSchema) => {
     let newUser = null
 
-    setLoadingCustomerData(true)
+    setLoadingCreateCustomer(true)
     try {
       newUser = await insertCustomerAPI(userData)
 
-      if (newUser) {
-        console.log(newUser)
+      if (!newUser) return newUser
 
-        await getCustomerData()
-      }
+      await fetchCustomersData()
 
     } catch (error) {
       console.log('Erro em createCustomer => ', error)
+
     } finally {
-      setLoadingCustomerData(false)
+      setLoadingCreateCustomer(false)
     }
 
     return newUser
-  }
+  }, [])
 
 
-  const createPurchase = async (purchaseData: CreatePurchaseSchema) => {
-    setLoadingCustomerData(true)
+  const createPurchase = useCallback(async (purchaseData: CreatePurchaseSchema) => {
+    setLoadingPurchase(true)
 
     let response = false
 
     try {
       const newPurchase = await insertPurchaseAPI(purchaseData)
 
-      if (!newPurchase) {
-        return response = false
-      }
+      if (!newPurchase) return response
 
-      await getCustomerData()
+      await fetchCustomersData()
 
       return response = true
 
@@ -186,54 +189,52 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
       console.log(error)
 
     } finally {
-      setLoadingCustomerData(false)
+      setLoadingPurchase(false)
     }
 
     return response
-  }
+  }, [])
 
 
-  const createPayment = async (customerId: number, paymentAmount: number, paymentMethod: string) => {
-    setLoadingCustomerData(true)
+  const createPayment = useCallback(async (customerId: number, paymentAmount: number, paymentMethod: string) => {
+    setLoadingPayment(true)
 
     let response = false
 
     try {
       response = await insertPaymentAPI(customerId, paymentAmount, paymentMethod)
 
-      if (!response) {
-        alert('Erro ao criar pagamento')
-        return response
-      }
+      if (!response) return response
 
-      await getCustomerData()
+      await fetchCustomersData()
 
     } catch (error) {
       console.log('Erro:', error)
 
     } finally {
-      setLoadingCustomerData(false)
+      setLoadingPayment(false)
     }
 
     return response
-  }
+  }, [fetchCustomersData])
+
 
   const value: CustomerContextType = {
     fullCustomerData,
     getCustomerById,
     loadingCustomerData,
+    loadingCreateCustomer,
+    loadingPayment,
+    loadingPurchase,
     purchases,
     lastPurchases,
-    filterPurchasesDate,
-    setFilterPurchasesDate,
     totalDebts,
     totalSales,
-    // filterPurchases,
     createCustomer,
     createPurchase,
     createPayment,
     payments,
-    lastPayments
+    lastPayments,
   }
 
 

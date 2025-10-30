@@ -30,6 +30,7 @@
     "react-native-modal-selector": "^2.1.2",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
+    "toastify-react-native": "^7.2.3",
     "zod": "^4.1.11"
   },
   "devDependencies": {

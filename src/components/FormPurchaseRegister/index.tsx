@@ -11,11 +11,14 @@ import CustomModalSelector from '../CustomModalSelector';
 import { androidToast } from '@/src/utils/android-toast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootTabParamList } from '@/src/routes/app.routes';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function FormPurchaseRegister() {
 
-  const { createPurchase, loadingCustomerData, fullCustomerData } = useCustomer()
-  const { navigate, reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
+  const { success, error } = useToast()
+
+  const { createPurchase, fullCustomerData, loadingPurchase } = useCustomer()
+  const { reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
@@ -53,15 +56,11 @@ export default function FormPurchaseRegister() {
     const fullPurchase = { ...data, customer_id: customerSelectedId }
     console.log(fullPurchase)
 
-
     const isNewPurchaseCreated = await createPurchase(fullPurchase)
 
-    if (!isNewPurchaseCreated) {
-      androidToast('Erro ao adicionar compra. Tente novamente.')
-      return
-    }
+    if (!isNewPurchaseCreated) return error('Erro ao salvar pagamento. Tente novamente.', 'Algo deu errado!')
 
-    androidToast('Compra registrada com sucesso!')
+    success('Venda feita com sucesso', 'Venda feita!')
     resetHistory({
       index: 0,
       routes: [{ name: 'home' }],
@@ -102,7 +101,7 @@ export default function FormPurchaseRegister() {
             isDisabled={false}
             label='Vender'
             onPress={handleSubmit(onSubmit)}
-            loading={loadingCustomerData}
+            loading={loadingPurchase}
           />
         </View>
       </>

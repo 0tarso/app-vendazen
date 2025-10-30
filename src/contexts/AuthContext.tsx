@@ -4,6 +4,8 @@ import { AuthSchema } from '../schemas/authSchema';
 import { authUserAPI } from '../api/authUser';
 import { RegisterSchema } from '../schemas/registerSchema';
 import { signUpUserAPI } from '../api/sign-up-user';
+import { RegisterUserResponseSchema, UserByEmailResponseSchema } from '../schemas/User/user-schema';
+import { NormalizedAxiosError } from '../utils/handle-axios-error';
 
 interface UserDataLogin {
   password: string;
@@ -22,7 +24,7 @@ interface AuthContextType {
   loadingAuth: boolean;
   login: (userData: UserDataLogin) => Promise<void>;
   logout: () => Promise<void>;
-  register: (userData: RegisterSchema) => Promise<void>;
+  register: (userData: RegisterSchema) => Promise<RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText'>>;
 }
 
 // 3. Cria o contexto
@@ -91,21 +93,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await removeUserToken();
   };
 
-  const register = async (userData: RegisterSchema) => {
+  const register = async (userData: RegisterSchema):
+    Promise<RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText' | 'status' | 'message'>> => {
     setLoadingAuth(true)
 
-    try {
-      const user = await signUpUserAPI(userData)
+    let result:
+      RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText' | 'status' | 'message'> = null
 
-      if (user) {
-        await saveUserToken(user.token)
-        setUserLogged(user)
+    try {
+      const response = await signUpUserAPI(userData)
+
+      if (response.data) {
+        await saveUserToken(response.data?.token)
+        setUserLogged(response.data)
+        result = response.data
       }
-    } catch (error) {
-      console.log('Erro ao registra => ', error)
+
+    } catch (error: any) {
+      console.log('Erro ao registrar => ', error)
+
+      result = {
+        statusText: error.statusText,
+        status: error.status,
+        message: error.message
+      }
+
     } finally {
       setLoadingAuth(false)
     }
+
+    return result
   }
 
   // Verificação de login ao carregar a aplicação

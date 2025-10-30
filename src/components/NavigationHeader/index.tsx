@@ -45,7 +45,7 @@ export default function NavigationHeader(props: NavigateHeaderProps) {
             navigation.goBack()
           }}
         >
-          <Ionicons name='arrow-back-outline' size={26} color={COLORS.GreenPrimary} />
+          <Ionicons name='chevron-back-outline' size={24} color={COLORS.GreenPrimary} />
 
         </TouchableOpacity>
         <Text style={styles.title}>{headerTitle}</Text>

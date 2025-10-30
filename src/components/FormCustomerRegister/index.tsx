@@ -11,8 +11,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CustomerListNavigationProp } from '../CustomerList';
 import { androidToast } from '@/src/utils/android-toast';
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function FormCustomerRegister() {
+
+  const { success, error } = useToast()
 
   const { navigate } = useNavigation<NavigationProp<CustomerStackParamList>>()
   const { createCustomer, loadingCustomerData } = useCustomer()
@@ -51,11 +54,11 @@ export default function FormCustomerRegister() {
 
     const newUser = await createCustomer(data)
 
-    if (newUser) {
-      androidToast('Cliente Adicionado')
+    if (!newUser) return error('Erro ao salvar cliente. Tente novamente.')
 
-      navigate('customer-list', { open: 'customer-list' })
-    }
+    success('Novo cliente adicionado com sucesso', 'Cliente cadastrado!')
+
+    navigate('customer-list', { open: 'customer-list' })
   };
 
 

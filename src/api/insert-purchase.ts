@@ -1,5 +1,6 @@
 
 import { CreatePurchaseSchema, PurchaseSchema } from '../schemas/Purchase/purchase-schema'
+import { handleAxiosError } from '../utils/handle-axios-error'
 import api from './api'
 
 export const insertPurchaseAPI = async (purchaseData: CreatePurchaseSchema) => {
@@ -13,6 +14,8 @@ export const insertPurchaseAPI = async (purchaseData: CreatePurchaseSchema) => {
     if (data) newPurchase = data.content
 
   } catch (error) {
+    const handled = handleAxiosError(error)
+
     console.log('Erro insertPurchaseAPI')
     throw error
   }

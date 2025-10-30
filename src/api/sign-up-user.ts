@@ -4,6 +4,11 @@ import { RegisterSchema } from '../schemas/registerSchema'
 import { AuthUser } from '../contexts/AuthContext'
 import { RegisterUserResponseSchema } from '../schemas/User/user-schema'
 import { HttpStatusCode } from '../utils/http-status-code'
+import { handleAxiosError } from '../utils/handle-axios-error'
+
+// enum ResponseStatus {
+//    = 'Email inválido, tente outro por favor.'
+// }
 
 export const signUpUserAPI = async (userData: RegisterSchema) => {
   const baseURL = Constants?.expoConfig?.extra?.DEV_BASE_URL_API ?? undefined
@@ -13,7 +18,7 @@ export const signUpUserAPI = async (userData: RegisterSchema) => {
   console.log(signUpURL)
 
   try {
-    const { data, status } = await axios.post(signUpURL, userData)
+    const { data, status, statusText } = await axios.post(signUpURL, userData)
 
     let user: RegisterUserResponseSchema | null = null
 
@@ -26,11 +31,17 @@ export const signUpUserAPI = async (userData: RegisterSchema) => {
       user = data.content
     }
 
-    return user
+    return {
+      data: user,
+      status,
+      statusText
+    }
 
   } catch (error) {
-    console.log('Erro ao criar usuário error => ', error)
-  }
+    const { message, status, statusText } = handleAxiosError(error)
 
-  return null
+    console.log(statusText)
+
+    throw { status, statusText, message }
+  }
 }

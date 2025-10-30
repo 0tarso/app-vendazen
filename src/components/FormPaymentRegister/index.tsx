@@ -14,26 +14,24 @@ import { useForm } from 'react-hook-form';
 import { createPaymentSchema, CreatePaymentSchema } from '@/src/schemas/Payment/payment-schema';
 import { getCustomerTotalDebt } from '@/src/utils/get-total-customer-debt';
 import { PaymentMethod } from '../ListItemCard';
+import { Toast } from 'toastify-react-native';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function FormPaymentRegister() {
+  const { success, error } = useToast()
+
   const paymentMethods = [
     { key: 1, label: PaymentMethod['PIX' as keyof typeof PaymentMethod] },
     { key: 2, label: PaymentMethod['CASH' as keyof typeof PaymentMethod] },
     { key: 3, label: PaymentMethod['DEBIT CARD' as keyof typeof PaymentMethod] },
     { key: 4, label: PaymentMethod['CREDIT CARD' as keyof typeof PaymentMethod] },
   ]
-  // const paymentMethods = [
-  //   { key: 1, label: 'PIX' },
-  //   { key: 2, label: 'DEBIT CARD' },
-  //   { key: 3, label: 'CREDIT CARD' },
-  //   { key: 4, label: 'CASH' },
-  // ]
-
 
   const { createPayment, loadingCustomerData, fullCustomerData } = useCustomer()
   const { navigate, reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
+
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
 
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null)
@@ -64,20 +62,13 @@ export default function FormPaymentRegister() {
       }
     }
 
-
-    return () => {
-      // setCustomerSelectedId(null)
-      // setPaymentMethod(null)
-      // reset()
-    }
   }, [fullCustomerData, customerSelectedId])
 
 
-
-
-  const { reset, control, handleSubmit } = useForm<CreatePaymentSchema>({
+  const { reset, control, handleSubmit, getValues } = useForm<CreatePaymentSchema>({
     resolver: zodResolver(createPaymentSchema),
   });
+
 
   const onSubmit = async (data: CreatePaymentSchema) => {
 
@@ -109,15 +100,11 @@ export default function FormPaymentRegister() {
 
     console.log(fullPayment)
 
-
     const isPaymentCreated = await createPayment(customerSelectedId, data.amount, paymentMethod)
 
-    if (!isPaymentCreated) {
-      androidToast('Erro ao criar pagamento. Tente novamente.')
-      return
-    }
+    if (!isPaymentCreated) return error('Erro ao salvar pagamento. Tente novamente.', 'Erro!')
 
-    androidToast('Pagamento Feito!')
+    success('Pagamento criado com sucesso', 'Pagamento Feito!')
 
     resetHistory({
       index: 0,
@@ -149,7 +136,9 @@ export default function FormPaymentRegister() {
         <CustomModalSelector
           placeholder='Selecione um cliente'
           data={customersList ?? []}
-          onChange={(key, label) => setCustomerSelectedId(key)}
+          onChange={(key, label) => {
+            setCustomerSelectedId(key)
+          }}
         />
 
         <CustomModalSelector

@@ -11,8 +11,11 @@ import CustomButton from '../CustomButton';
 import { styles } from './styles';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { nextStep, previousStep } from './actions';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function RegisterForm() {
+
+  const { error } = useToast()
 
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
   const { register, loadingAuth } = useAuth()
@@ -24,11 +27,11 @@ export default function RegisterForm() {
   useEffect(() => {
     // Adiciona os ouvintes de eventos ao montar o componente
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true); // O teclado está visível
+      setKeyboardVisible(true);
     },
     );
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false); // O teclado está escondido
+      setKeyboardVisible(false);
     },
     );
 
@@ -40,7 +43,7 @@ export default function RegisterForm() {
   }, [])
 
 
-  const { reset, control, handleSubmit, trigger, formState: { errors } } = useForm<RegisterSchema>({
+  const { reset, control, handleSubmit, trigger, getValues, formState: { errors, } } = useForm<RegisterSchema>({
     resolver: zodResolver(registerFinalSchema),
     defaultValues: {
       name: '',
@@ -51,7 +54,7 @@ export default function RegisterForm() {
 
 
   const handleNextStep = async () => {
-    nextStep(step, setStep, trigger)
+    nextStep(step, setStep, trigger, getValues)
   }
 
   const handlePreviousStep = async () => {
@@ -59,13 +62,19 @@ export default function RegisterForm() {
   }
 
   const onSubmit = async (userData: RegisterSchema) => {
-    try {
-      await register(userData)
-    } catch (error) {
-      console.log('Erro onSubmit formulario => ', error)
+
+    const response = await register(userData)
+
+    if (response.statusText) {
+      console.log('Log em form register')
+      console.log('Error text => ', response.statusText)
+
+      error('Erro ao criar, tente novamente.', 'Ops, erro.')
     }
 
-  };
+  }
+
+
   return (
     <>
       <ScrollView

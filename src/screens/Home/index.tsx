@@ -6,6 +6,7 @@ import LastPurchaseList from '@/src/components/PurchaseList'
 import SummaryCards from '@/src/components/SalesSummary'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 import { COLORS } from '@/src/constants/Colors'
+import SummaryCustomers from '@/src/components/SummaryCustomers'
 
 export default function HomeScreen() {
 
@@ -33,6 +34,8 @@ export default function HomeScreen() {
             debtsValue={totalDebts}
             salesValue={totalSales}
           />
+
+          <SummaryCustomers />
 
         </ScrollView>
       )}
