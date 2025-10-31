@@ -5,6 +5,7 @@ import NavigationHeader from "../components/NavigationHeader";
 import CustomerRegister from "../screens/CustomerRegister";
 import PurchaseRegister from "../screens/PurchaseRegister";
 import PaymentRegister from "../screens/PaymentRegister";
+import CustomerEditScreen from "../screens/CustomerEdit";
 
 
 const Stack = createStackNavigator<CustomerStackParamList>()
@@ -15,6 +16,7 @@ export type CustomerStackParamList = {
   'customer-register': undefined;
   'purchase-register': undefined;
   'payment-register': undefined;
+  'customer-edit': { customerId: string };
 };
 
 export default function CustomerStackRoutes() {
@@ -35,6 +37,8 @@ export default function CustomerStackRoutes() {
       <Stack.Screen name="customer-details" component={CustomerDetails} />
 
       <Stack.Screen name="customer-register" component={CustomerRegister} />
+
+      <Stack.Screen name="customer-edit" component={CustomerEditScreen} />
 
     </Stack.Navigator>
   )

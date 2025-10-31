@@ -19,7 +19,8 @@ enum RouteTitle {
   'purchase-register' = 'Nova Compra',
   'customer-details' = 'Detalhes do Cliente',
   'payment-register' = 'Adicionar Pagamento',
-  'payments' = 'Lista de Pagamentos'
+  'payments' = 'Lista de Pagamentos',
+  'customer-edit' = 'Dados do Cliente'
 }
 
 

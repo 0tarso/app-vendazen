@@ -1,5 +1,5 @@
 import { CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema"
-import api from "./api"
+import api from "../api/api"
 
 export const getCustomersAPI = async () => {
 

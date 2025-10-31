@@ -1,20 +1,22 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CustomerResponseSchema, CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema";
-import { getCustomersAPI } from "../api/get-customers";
+import { getCustomersAPI } from "../services/get-customers";
 import { CreatePurchaseSchema, createPurchaseSchema, PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
 import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
 import { nullable } from "zod";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
-import { insertCustomerAPI } from "../api/insert-customer";
+import { insertCustomerAPI } from "../services/insert-customer";
 import { CreatePaymentSchema, PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
-import { insertPurchaseAPI } from "../api/insert-purchase";
-import { insertPaymentAPI } from "../api/insert-payment";
+import { insertPurchaseAPI } from "../services/insert-purchase";
+import { insertPaymentAPI } from "../services/insert-payment";
 import { Toast } from "toastify-react-native";
+import { updateCustomerService } from "../services/update-customer";
 
 interface CustomerContextType {
   loadingCreateCustomer: boolean,
+  loadingEditCustomer: boolean,
   loadingPayment: boolean,
   loadingPurchase: boolean,
   totalSales: number,
@@ -29,6 +31,7 @@ interface CustomerContextType {
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
   createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<boolean>,
   createPayment: (customerId: number, paymentAmount: number, paymentMethod: string) => Promise<boolean>
+  updateCustomer: (UpdateCustomer: { id: number, name?: string, cpf?: number, phone?: string }) => Promise<CustomerResponseSchema | null>
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -64,6 +67,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [loadingCreateCustomer, setLoadingCreateCustomer] = useState(false)
   const [loadingPurchase, setLoadingPurchase] = useState(false)
   const [loadingPayment, setLoadingPayment] = useState(false)
+  const [loadingEditCustomer, setLoadingEditCustomer] = useState(false)
 
   useEffect(() => {
     if (!userLogged) {
@@ -170,6 +174,31 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   }, [])
 
 
+  const updateCustomer = useCallback(
+    async (UpdateCustomer: { id: number, name?: string, cpf?: number, phone?: string }) => {
+
+      let updatedCustomerResponse: CustomerResponseSchema | null = null
+
+      setLoadingEditCustomer(true)
+
+      try {
+        updatedCustomerResponse = await updateCustomerService(UpdateCustomer)
+
+        if (!updatedCustomerResponse) return updatedCustomerResponse
+
+        await fetchCustomersData()
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoadingEditCustomer(false)
+      }
+
+      return updatedCustomerResponse
+    }, []
+  )
+
+
+
   const createPurchase = useCallback(async (purchaseData: CreatePurchaseSchema) => {
     setLoadingPurchase(true)
 
@@ -235,6 +264,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     createPayment,
     payments,
     lastPayments,
+    updateCustomer,
+    loadingEditCustomer
   }
 
 

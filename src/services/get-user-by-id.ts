@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "axios"
-import api from "./api"
+import api from "../api/api"
 import { UserResponse } from "../schemas/User/user-schema"
 
 export const getUserByIdAPI = async (user_id: string) => {

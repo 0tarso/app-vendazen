@@ -1,6 +1,6 @@
 import { View, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { RouteProp, useRoute } from '@react-navigation/native'
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 import { useCustomer } from '@/src/contexts/CustomerContext';
 import { CustomerWithPurchasesAndPayments } from '@/src/schemas/Customer/customer-schema';
@@ -13,11 +13,12 @@ import { getTotalSales } from '@/src/utils/get-total-sales';
 import { PaymentSchema } from '@/src/schemas/Payment/payment-schema';
 
 
-type CustomerDetailsRouteProp = RouteProp<CustomerStackParamList, 'customer-details'>;
+export type CustomerDetailsRouteProp = RouteProp<CustomerStackParamList, 'customer-details'>;
 
 export default function CustomerDetails() {
 
   const { params: { customerId } } = useRoute<CustomerDetailsRouteProp>()
+  const { navigate } = useNavigation<NavigationProp<CustomerStackParamList>>()
 
   const { getCustomerById } = useCustomer()
 
@@ -53,6 +54,11 @@ export default function CustomerDetails() {
     setCustomer(customerData)
   }, [customerId])
 
+
+  const handleNavigate = () => {
+    navigate('customer-edit', { customerId: customerId })
+  }
+
   return (
     <View>
       {/* <NavigationHeader title='Cliente' /> */}
@@ -63,7 +69,7 @@ export default function CustomerDetails() {
       >
         <CustomerTitle
           name={customer ? customer.name : 'Undefined'}
-          onPress={() => console.log('Abrir tela editar dados')}
+          onPress={handleNavigate}
         />
 
         <LastPurchaseList

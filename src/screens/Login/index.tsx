@@ -23,8 +23,6 @@ export default function LoginScreen() {
 
         <FormLogin />
 
-
-
       </KeyboardAvoidingView>
     </View>
   )

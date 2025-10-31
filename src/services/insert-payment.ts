@@ -1,4 +1,4 @@
-import api from "./api"
+import api from "../api/api"
 
 export const insertPaymentAPI = async (customerId: number, paymentAmount: number, paymentMethod: string) => {
 

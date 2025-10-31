@@ -1,6 +1,6 @@
 import { CustomerResponseSchema } from "../schemas/Customer/customer-schema";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
-import api from "./api";
+import api from "../api/api";
 
 export const insertCustomerAPI = async (customerData: CreateCustomerSchema) => {
 
