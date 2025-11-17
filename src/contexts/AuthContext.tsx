@@ -5,7 +5,7 @@ import { authUserAPI } from '../services/authUser';
 import { RegisterSchema } from '../schemas/registerSchema';
 import { signUpUserAPI } from '../services/sign-up-user';
 import { RegisterUserResponseSchema, UserByEmailResponseSchema } from '../schemas/User/user-schema';
-import { NormalizedAxiosError } from '../utils/handle-axios-error';
+import { handleAxiosError, NormalizedAxiosError } from '../utils/handle-axios-error';
 
 interface UserDataLogin {
   password: string;
@@ -22,9 +22,9 @@ interface AuthContextType {
   userLogged: AuthUser | null;
   userLogin: UserDataLogin | null;
   loadingAuth: boolean;
-  login: (userData: UserDataLogin) => Promise<void>;
+  login: (userData: UserDataLogin) => Promise<AuthUser | NormalizedAxiosError | null>;
   logout: () => Promise<void>;
-  register: (userData: RegisterSchema) => Promise<RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText'>>;
+  register: (userData: RegisterSchema) => Promise<RegisterUserResponseSchema | NormalizedAxiosError | null>;
 }
 
 // 3. Cria o contexto
@@ -66,6 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Lógica de login
   const login = async (userData: AuthSchema) => {
     setLoadingAuth(true)
+    console.log('loginnnnn')
+    let loginResponse: AuthUser | NormalizedAxiosError | null = null
+
     // setUser(userData);
     try {
       // await saveUserData(userData)
@@ -75,14 +78,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await saveUserToken(user.token)
 
         setUserLogged(user)
+
+        loginResponse = user
       }
 
     } catch (error) {
-      console.log(error)
+      const handledError = handleAxiosError(error)
+
+      loginResponse = handledError
+
     }
     finally {
       setLoadingAuth(false)
     }
+
+
+    console.log(loginResponse)
+    return loginResponse
   };
 
   // Lógica de logout
@@ -93,12 +105,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await removeUserToken();
   };
 
-  const register = async (userData: RegisterSchema):
-    Promise<RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText' | 'status' | 'message'>> => {
+  const register = async (userData: RegisterSchema): Promise<RegisterUserResponseSchema | null | NormalizedAxiosError> => {
     setLoadingAuth(true)
 
-    let result:
-      RegisterUserResponseSchema | null | Pick<NormalizedAxiosError, 'statusText' | 'status' | 'message'> = null
+    let registerResponse:
+      RegisterUserResponseSchema | null | NormalizedAxiosError = null
 
     try {
       const response = await signUpUserAPI(userData)
@@ -106,23 +117,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.data) {
         await saveUserToken(response.data?.token)
         setUserLogged(response.data)
-        result = response.data
+        registerResponse = response.data
       }
 
     } catch (error: any) {
       console.log('Erro ao registrar => ', error)
 
-      result = {
-        statusText: error.statusText,
-        status: error.status,
-        message: error.message
-      }
+      const handledError = handleAxiosError(error)
+
+      registerResponse = handledError
 
     } finally {
       setLoadingAuth(false)
     }
 
-    return result
+    return registerResponse
   }
 
   // Verificação de login ao carregar a aplicação

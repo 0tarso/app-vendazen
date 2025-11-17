@@ -1,8 +1,5 @@
-import { number } from "zod";
 import api from "../api/api";
-import { UserResponse } from "../schemas/User/user-schema";
 import { CustomerResponseSchema } from "../schemas/Customer/customer-schema";
-import { handleAxiosError } from "../utils/handle-axios-error";
 
 
 export const updateCustomerService = async (
@@ -20,9 +17,8 @@ export const updateCustomerService = async (
 
 
   } catch (error) {
-    const handled = handleAxiosError(error)
-
-    throw handled
+    console.log('=======Erro updateCustomerService======')
+    throw error
   }
 
   return updatedCustomer

@@ -15,7 +15,7 @@ import { useToast } from '@/src/hooks/useToast';
 
 export default function RegisterForm() {
 
-  const { error } = useToast()
+  const { error, success } = useToast()
 
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
   const { register, loadingAuth } = useAuth()
@@ -65,13 +65,16 @@ export default function RegisterForm() {
 
     const response = await register(userData)
 
-    if (response.statusText) {
-      console.log('Log em form register')
-      console.log('Error text => ', response.statusText)
+    if (!response) return error('Erro inesperado ao criar usuário. Tente novamente.', 'Erro inesperado')
 
-      error('Erro ao criar, tente novamente.', 'Ops, erro.')
+    if ('token' in response) {
+      success('Olá, bom você por aqui!', 'Bem-vindo(a)!')
     }
 
+    else {
+      console.log(response)
+      error('Erro ao cadastrar usuário :(', 'Ops, tivemos um erro')
+    }
   }
 
 

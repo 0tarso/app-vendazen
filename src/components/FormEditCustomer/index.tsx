@@ -101,19 +101,19 @@ export default function FormEditCustomer(props: FormEditCustomerProps) {
             keyboardType='phone-pad'
           />
 
-          <CustomInput
+          {/* <CustomInput
             control={control}
             name="cpf"
             placeholder='CPF (opcional)'
             isPassword={false}
             keyboardType='phone-pad'
-          />
+          /> */}
 
         </View>
 
         {!isKeyboardVisible && (
           <>
-            <View style={{ marginTop: 40 }}>
+            <View style={{ marginTop: 110 }}>
               <CustomButton
                 isDisabled={false}
                 label='Salvar'
@@ -122,7 +122,6 @@ export default function FormEditCustomer(props: FormEditCustomerProps) {
               />
             </View>
           </>
-
         )}
       </ScrollView>
 

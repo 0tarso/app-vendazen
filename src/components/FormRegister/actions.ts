@@ -6,6 +6,7 @@ import { email } from "zod";
 import { handleAxiosError } from "@/src/utils/handle-axios-error";
 import { androidToast } from "@/src/utils/android-toast";
 import { Toast } from "toastify-react-native";
+import { checkEmailService } from "@/src/services/check-email";
 
 
 
@@ -15,13 +16,14 @@ export const nextStep = async (
   trigger: UseFormTrigger<RegisterSchema>,
   field: UseFormGetValues<RegisterSchema>
 ) => {
+
   let isValid = false
 
   if (step === 1) isValid = await trigger('name')
 
 
   if (step === 2) {
-    const isValid = await trigger('email')
+    isValid = await trigger('email')
 
     if (!isValid) return
 
@@ -31,7 +33,7 @@ export const nextStep = async (
     const newUserEmail = { email: field('email') }
 
     try {
-      const response = await api.post("/check-email", newUserEmail)
+      const response = await checkEmailService(newUserEmail.email)
 
       console.log(response.data)
 
@@ -42,12 +44,11 @@ export const nextStep = async (
       Toast.show({
         type: 'info',
         text1: 'Ops!',
-        text2: 'Por favor, tente outro email',
+        text2: `${handled.data.message}`,
       })
 
-      return
+      isValid = false
     }
-
   }
 
 

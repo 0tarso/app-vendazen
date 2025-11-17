@@ -11,6 +11,7 @@ export const purchaseSchema = z.object({
   due_date: z.string().transform((str) => new Date(str)).nullable(),
   created_at: z.string().transform((str) => new Date(str)),
   updated_at: z.string().transform((str) => new Date(str)).nullable(),
+  deleted_at: z.string().transform((str) => new Date(str)).nullable()
 })
 
 export type PurchaseSchema = z.infer<typeof purchaseSchema>
@@ -31,7 +32,8 @@ export const createPurchaseSchema = purchaseSchema.omit({
   due_date: true,
   created_at: true,
   updated_at: true,
-  remaining_amount: true
+  remaining_amount: true,
+  deleted_at: true
 })
 export type CreatePurchaseSchema = z.infer<typeof createPurchaseSchema>
 

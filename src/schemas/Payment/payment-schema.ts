@@ -5,8 +5,8 @@ export const paymentSchema = z.object({
   customer_id: z.number(),
   created_at: z.string().transform((str) => new Date(str)),
   amount: z.number(),
-  payment_method: z.enum({ PIX: 'PIX', CREDIT_CARD: 'CREDIT CARD', DEBIT_CARD: 'DEBIT CARD', CASH: 'CASH' })
-
+  payment_method: z.enum({ PIX: 'PIX', CREDIT_CARD: 'CREDIT CARD', DEBIT_CARD: 'DEBIT CARD', CASH: 'CASH' }),
+  deleted_at: z.string().transform((str) => new Date(str)).nullable()
 })
 
 

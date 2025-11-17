@@ -11,8 +11,11 @@ import CustomInput from '../CustomInput';
 import CustomButton from '../CustomButton';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { useTheme } from '@/src/contexts/ThemeContext';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function FormLogin() {
+  const { error, info } = useToast()
+
   const { login, loadingAuth } = useAuth()
   const { toggleTheme } = useTheme()
   const { navigate } = useNavigation<NavigationProp<AuthTabParamList>>()
@@ -45,16 +48,16 @@ export default function FormLogin() {
   });
 
   const onSubmit = async (data: AuthSchema) => {
-    try {
-      await login({
-        email: data.email,
-        password: data.password
-      })
 
-    } catch (error) {
-      console.log(error)
+    console.log('dassdasd')
+
+    const response = await login({ email: data.email, password: data.password })
+
+    if (response === null) return
+
+    if ('statusText' in response) {
+      info(`${response.data.message}`, 'Algo errado em seu login')
     }
-
   };
 
 

@@ -13,24 +13,23 @@ export const authUserAPI = async (userData: AuthSchema) => {
   const authURL = `${baseURL}/login`
   console.log(authURL)
 
+  let userLoginResponse: AuthUser | null = null
+
   try {
     const { data, status } = await axios.post(authURL, userData)
-
-    let user: AuthUser | null = null
 
     if (data && status === HttpStatusCode.OK) {
       console.log('User email => ', data.content.email)
       console.log('User id => ', data.content.user_id)
       console.log('JWT token => ', data.content.token)
 
-      user = data.content
+      userLoginResponse = data.content
 
     }
-    return user
 
   } catch (error) {
-    console.log("Error do login -> ", error)
+    throw error
   }
 
-  return null
+  return userLoginResponse
 }

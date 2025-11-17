@@ -86,19 +86,19 @@ export default function FormCustomerRegister() {
             keyboardType='phone-pad'
           />
 
-          <CustomInput
+          {/* <CustomInput
             control={control}
             name="cpf"
             placeholder='CPF (opcional)'
             isPassword={false}
             keyboardType='phone-pad'
-          />
+          /> */}
 
         </View>
 
         {!isKeyboardVisible && (
           <>
-            <View style={{ marginTop: 40 }}>
+            <View style={{ marginTop: 80 }}>
               <CustomButton
                 isDisabled={false}
                 label='Adicionar'

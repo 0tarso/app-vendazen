@@ -13,8 +13,10 @@ import { insertPurchaseAPI } from "../services/insert-purchase";
 import { insertPaymentAPI } from "../services/insert-payment";
 import { Toast } from "toastify-react-native";
 import { updateCustomerService } from "../services/update-customer";
+import { handleAxiosError, NormalizedAxiosError } from "../utils/handle-axios-error";
 
 interface CustomerContextType {
+  errorGetCustomersData: NormalizedAxiosError,
   loadingCreateCustomer: boolean,
   loadingEditCustomer: boolean,
   loadingPayment: boolean,
@@ -69,6 +71,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [loadingPayment, setLoadingPayment] = useState(false)
   const [loadingEditCustomer, setLoadingEditCustomer] = useState(false)
 
+  const [errorGetCustomersData, setErrorGetCustomersData] = useState<null | NormalizedAxiosError>(null)
+
   useEffect(() => {
     if (!userLogged) {
       setFullCustomerData(null)
@@ -94,6 +98,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     console.log('Buscanod dados')
 
     setLoadingCustomerData(true)
+    setErrorGetCustomersData(null)
 
     try {
       const customersData = await getCustomersAPI()
@@ -122,9 +127,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
         )
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-      const totalSales = getTotalSales(purchases, 'month')
+      const totalSales = getTotalSales(purchases, 'all-time')
 
-      const totalDebts = getTotalDebts(purchases, 'month')
+      const totalDebts = getTotalDebts(purchases, 'all-time')
 
       const lastPurchases = purchases.slice(0, 5)
       const lastPayments = payments.slice(0, 5)
@@ -139,6 +144,10 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
 
     } catch (error) {
+      const handledError = handleAxiosError(error)
+      setErrorGetCustomersData(handledError)
+
+
       console.log('Erro em CustomerProvider => ', error)
     } finally {
       setLoadingCustomerData(false)
@@ -177,7 +186,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const updateCustomer = useCallback(
     async (UpdateCustomer: { id: number, name?: string, cpf?: number, phone?: string }) => {
 
-      let updatedCustomerResponse: CustomerResponseSchema | null = null
+      let updatedCustomerResponse: CustomerResponseSchema | NormalizedAxiosError | null = null
 
       setLoadingEditCustomer(true)
 
@@ -187,8 +196,18 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
         if (!updatedCustomerResponse) return updatedCustomerResponse
 
         await fetchCustomersData()
+
       } catch (error) {
-        console.log(error)
+
+        //passar todos os erros do service para o contexto
+        //mandar o erro para o componente e tratar a msg lá
+        //ou criar função para tratar mensagem no componente
+
+
+        const handledError = handleAxiosError(error)
+        console.log(handledError.message)
+
+        updatedCustomerResponse = handledError
       } finally {
         setLoadingEditCustomer(false)
       }

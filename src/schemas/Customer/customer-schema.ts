@@ -20,7 +20,9 @@ export const customerSchema = z.object({
     }, { message: "CPF inválido" })
     .nullable(),
   created_at: z.string().transform((str) => new Date(str)),
-  updated_at: z.string().transform((str) => new Date(str)).nullable()
+  updated_at: z.string().transform((str) => new Date(str)).nullable(),
+  deleted_at: z.string().transform((str) => new Date(str)).nullable(),
+  credit_balance: z.number().nullable()
 })
 
 export const customerEditSchema = z.object({

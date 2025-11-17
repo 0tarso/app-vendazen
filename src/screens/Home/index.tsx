@@ -30,7 +30,7 @@ export default function HomeScreen() {
           />
 
           <SummaryCards
-            title='Resumo Mensal'
+            title='Resumo'
             debtsValue={totalDebts}
             salesValue={totalSales}
           />
