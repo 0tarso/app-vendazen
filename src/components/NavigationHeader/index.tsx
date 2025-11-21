@@ -20,7 +20,8 @@ enum RouteTitle {
   'customer-details' = 'Detalhes do Cliente',
   'payment-register' = 'Adicionar Pagamento',
   'payments' = 'Lista de Pagamentos',
-  'customer-edit' = 'Dados do Cliente'
+  'customer-edit' = 'Dados do Cliente',
+  'reports' = 'Relatórios'
 }
 
 

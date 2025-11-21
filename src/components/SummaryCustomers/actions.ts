@@ -5,15 +5,13 @@ export const calculateSummary = (
 
 ) => {
 
-  const customersWithDebtCount = fullCustomerData.reduce((acc, customer) => {
+  const customersWithDebtCount = fullCustomerData.reduce((customersWithDebt, customer) => {
 
-    customer.purchases.forEach((purchase) => {
-      if (purchase.paid === true) return
+    if (!customer.purchases) return customersWithDebt
 
-      acc = acc + 1
-    })
+    const hasDebt = customer.purchases.some((purchase) => purchase.paid === false)
 
-    return acc
+    return hasDebt ? customersWithDebt + 1 : customersWithDebt
   }, 0)
 
 

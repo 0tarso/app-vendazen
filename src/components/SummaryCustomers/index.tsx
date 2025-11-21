@@ -22,6 +22,9 @@ export default function SummaryCustomers() {
         newCustomersThisWeekCount,
         purchasesThisWeekCount } = calculateSummary(fullCustomerData)
 
+
+      console.log('Cliente em debito', customersWithDebtCount)
+
       setCustomersWithDebt(customersWithDebtCount);
       setNewCustomers(newCustomersThisWeekCount);
       setPurchasesThisWeek(purchasesThisWeekCount);
@@ -38,21 +41,21 @@ export default function SummaryCustomers() {
 
         <View style={styles.card}>
           <Text style={styles.value}>{customersWithDebt}</Text>
-          <Text style={styles.label}>Clientes em débito</Text>
+          <Text style={styles.label}>{customersWithDebt && customersWithDebt <= 1 ? 'Cliente em débito' : 'Clientes em débito'}</Text>
         </View>
 
         <View style={styles.separator}></View>
 
         <View style={styles.card}>
           <Text style={styles.value}>{newCustomers}</Text>
-          <Text style={styles.label}>Novos clientes {'(7 dias)'}</Text>
+          <Text style={styles.label}>{newCustomers && newCustomers <= 1 ? 'Novo cliente' : 'Novos clientes'} {'      (7 dias)'}</Text>
         </View>
 
         <View style={styles.separator}></View>
 
         <View style={styles.card}>
           <Text style={styles.value}>{purchasesThisWeek}</Text>
-          <Text style={styles.label}>Vendas {'          (7 dias)'}</Text>
+          <Text style={styles.label}>{purchasesThisWeek && purchasesThisWeek <= 1 ? 'Venda' : 'Vendas'} {'             (7 dias)'}</Text>
         </View>
 
       </View>

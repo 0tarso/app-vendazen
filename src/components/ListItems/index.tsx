@@ -12,6 +12,7 @@ import { PaymentSchema, PaymentWithCustomerName } from '@/src/schemas/Payment/pa
 interface ListItemsProps {
   purchases?: PurchaseWithCustomer[]
   payments?: PaymentWithCustomerName[]
+  modal: boolean
 }
 
 export default function ListItems(props: ListItemsProps) {
@@ -19,70 +20,33 @@ export default function ListItems(props: ListItemsProps) {
 
   // const { purchases } = useCustomer()
 
-  const [filteredItems, setFilteredItems] = useState<PurchaseWithCustomer[] | PaymentWithCustomerName[] | null>(null)
+  const [filteredItems, setFilteredItems] = useState<(PurchaseWithCustomer | PaymentWithCustomerName)[] | null>(null)
 
   const [filterDate, setFilterDate] = useState<string>(new Date().toISOString())
 
+  const items = props.purchases || props.payments;
 
   useEffect(() => {
+    if (props.modal) console.log('Modal mode')
 
-    if (props.purchases) {
-
-      const filteringPurchases = props.purchases?.filter((purchase) => {
-
-        const purchaseDate = new Date(purchase.created_at);
-        purchaseDate.setHours(0, 0, 0, 0)
-
-        const dateFilter = new Date(filterDate)
-        dateFilter.setHours(0, 0, 0, 0)
-
-        return purchaseDate.getFullYear() === dateFilter.getFullYear() &&
-          purchaseDate.getMonth() === dateFilter.getMonth() &&
-          purchaseDate.getDate() === dateFilter.getDate()
-      })
-
-
-      if (!filteringPurchases || filteringPurchases?.length === 0) {
-        setFilteredItems(null)
-        return
-      }
-
-      setFilteredItems(filteringPurchases)
-      return
-    }
-    if (props.payments) {
-
-      const filteringPayments = props.payments?.filter((payment) => {
-
-        const purchaseDate = new Date(payment.created_at);
-        purchaseDate.setHours(0, 0, 0, 0)
-
-        const dateFilter = new Date(filterDate)
-        dateFilter.setHours(0, 0, 0, 0)
-
-        return purchaseDate.getFullYear() === dateFilter.getFullYear() &&
-          purchaseDate.getMonth() === dateFilter.getMonth() &&
-          purchaseDate.getDate() === dateFilter.getDate()
-      })
-
-
-      if (!filteringPayments || filteringPayments?.length === 0) {
-        setFilteredItems(null)
-        return
-      }
-
-      setFilteredItems(filteringPayments)
-      return
+    if (!items) {
+      setFilteredItems(null);
+      return;
     }
 
+    const dateToFilter = new Date(filterDate).toDateString();
 
-  }, [filterDate, props.payments, props.purchases])
+    const filtered = items.filter((item) => {
+      const itemDate = new Date(item.created_at).toDateString();
+      return itemDate === dateToFilter;
+    });
+
+    setFilteredItems(filtered.length > 0 ? filtered : null);
+
+  }, [filterDate, items]);
 
   const showAllItems = () => {
-
-    if (props.purchases) return setFilteredItems(props.purchases)
-
-    if (props.payments) return setFilteredItems(props.payments)
+    setFilteredItems(items || null);
   }
 
   const handleSetFilterDate = (date: string) => {
@@ -96,21 +60,23 @@ export default function ListItems(props: ListItemsProps) {
         bottom: 30
       }}>
         <CustomDatePicker
-          onChangeDate={(dateString) => handleSetFilterDate(dateString)}
+          onChangeDate={(dateString) => handleSetFilterDate(dateString)} select='date'
         />
       </View>
 
       {filteredItems && filteredItems.length > 0 ? (
         <FlatList
-          data={filteredItems}
-          renderItem={({ item }) => <ListItemCard item={item} />}
+          data={filteredItems as (PurchaseWithCustomer | PaymentWithCustomerName)[]}
+          renderItem={({ item }) => (
+            props.modal ? <ListItemCard item={item} editMode /> : <ListItemCard item={item} />)}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ paddingBottom: 80 }}
         />
       ) : (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Ionicons name='calendar-clear-outline' size={60} color={COLORS.GreenPrimary} />
-          <Text style={{ fontSize: 22, marginTop: 20, textAlign: 'center', fontFamily: "MontserratRegular" }}>Sem vendas nessa data</Text>
+          <Text style={{ fontSize: 22, marginTop: 20, textAlign: 'center', fontFamily: "MontserratRegular" }}>
+            {props.payments ? 'Nenhum pagamento nessa data' : 'Nenhuma venda nessa data'}</Text>
 
           <View style={{ width: '100%', marginTop: 50 }}>
 

@@ -1,12 +1,15 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { PurchaseWithCustomer } from '@/src/schemas/Purchase/purchase-schema'
 import { COLORS } from '@/src/constants/Colors'
 import { PaymentWithCustomerName } from '@/src/schemas/Payment/payment-schema'
+import { Ionicons } from '@expo/vector-icons'
+import { transformMethodName } from '@/src/utils/transform-payment-method'
 
 
 interface ListItemCardProps {
   item: PurchaseWithCustomer | PaymentWithCustomerName
+  editMode?: boolean
 }
 
 export enum PaymentMethod {
@@ -42,7 +45,7 @@ export default function ListItemCard(props: ListItemCardProps) {
 
       if ('payment_method' in props.item) {
         const method = props.item.payment_method
-        if (method) setPaymentMethod(PaymentMethod[method as keyof typeof PaymentMethod])
+        if (method) setPaymentMethod(transformMethodName(method))
       }
 
       setTime(time)
@@ -51,6 +54,33 @@ export default function ListItemCard(props: ListItemCardProps) {
     }
 
   }, [])
+
+  if (props.editMode) {
+    return (
+      <View style={styles.container} >
+
+        <TouchableOpacity style={styles.trashContainer}>
+          <Ionicons name='trash-outline' size={20} color={COLORS.GrayFont} />
+        </TouchableOpacity>
+
+        <View style={styles.amountContainer}>
+          <Text style={styles.currencyText}>R$</Text>
+          <Text style={styles.amountText}>{props.item.amount.toFixed(2)}</Text>
+        </View>
+
+        <View>
+          <Text style={styles.customerName}>{customerName}</Text>
+        </View>
+
+        {paymentMethod && (
+          <Text style={styles.method}>{paymentMethod}</Text>
+        )}
+
+        <Text style={styles.date}>{dateToString}</Text>
+        <Text style={styles.time}>{time}</Text>
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container} >
@@ -87,6 +117,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: 'center'
 
+  },
+  trashContainer: {
+    position: 'absolute',
+    right: 15,
+    top: 5,
+    // backgroundColor: 'red',
+    padding: 5
   },
   text: {
     fontSize: 20

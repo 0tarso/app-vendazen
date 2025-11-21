@@ -16,15 +16,17 @@ import { getCustomerTotalDebt } from '@/src/utils/get-total-customer-debt';
 import { PaymentMethod } from '../ListItemCard';
 import { Toast } from 'toastify-react-native';
 import { useToast } from '@/src/hooks/useToast';
+import { transformMethodName } from '@/src/utils/transform-payment-method';
+import { tr } from 'zod/v4/locales';
 
 export default function FormPaymentRegister() {
   const { success, error } = useToast()
 
   const paymentMethods = [
-    { key: 1, label: PaymentMethod['PIX' as keyof typeof PaymentMethod] },
-    { key: 2, label: PaymentMethod['CASH' as keyof typeof PaymentMethod] },
-    { key: 3, label: PaymentMethod['DEBIT CARD' as keyof typeof PaymentMethod] },
-    { key: 4, label: PaymentMethod['CREDIT CARD' as keyof typeof PaymentMethod] },
+    { key: 1, label: transformMethodName('PIX') },
+    { key: 2, label: transformMethodName('CASH') },
+    { key: 3, label: transformMethodName('DEBIT CARD') },
+    { key: 4, label: transformMethodName('CREDIT CARD') },
   ]
 
   const { createPayment, loadingCustomerData, fullCustomerData } = useCustomer()

@@ -32,6 +32,7 @@ export default function ModalListItems(props: ModalListItemsProps) {
 
           <Text style={{ fontFamily: 'MontserratSemiBold', fontSize: 20, marginTop: 60, color: COLORS.GrayFont }}>{props.title}</Text>
           <ListItems
+            modal
             purchases={props.purchases}
           />
 
@@ -50,6 +51,7 @@ export default function ModalListItems(props: ModalListItemsProps) {
 
           <Text style={{ fontFamily: 'MontserratSemiBold', fontSize: 20, marginTop: 60, color: COLORS.GrayFont }}>{props.title}</Text>
           <ListItems
+            modal
             payments={props.payments}
           />
 

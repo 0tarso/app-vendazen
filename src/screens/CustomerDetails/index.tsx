@@ -134,6 +134,7 @@ export default function CustomerDetails() {
           title={`Vendas de ${customer?.name}`}
           visible={showPurchasesModal}
           purchases={purchases}
+
         />
 
         <ModalListItems

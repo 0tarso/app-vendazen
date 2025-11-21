@@ -23,6 +23,7 @@ export default function TabItem({ state, descriptors, navigation, route, index }
     "customers": "people-outline",
     "purchases": "bag-check-outline",
     "payments": "cash-outline",
+    "reports": "bar-chart-outline",
   }[route.name] || "ellipse-outline";
 
   const isFocused = state.index === index;
@@ -57,21 +58,47 @@ export default function TabItem({ state, descriptors, navigation, route, index }
       style={styles.tab}
       activeOpacity={0.8}
     >
-      <Animated.View style={{ alignItems: "center", transform: [{ scale }] }}>
-        <Ionicons
-          name={iconName as any}
-          size={24}
-          color={isFocused ? COLORS.GreenPrimary : COLORS.GrayFont}
-        />
-        <Text
-          style={[{
-            color: isFocused ? COLORS.GreenPrimary : COLORS.GrayFont,
-            fontSize: 10,
-          }, styles.tabText]}
-        >
-          {label as string}
-        </Text>
-      </Animated.View>
+
+      {route.name !== "home" ? (
+
+        <Animated.View style={
+          [route.name === 'home' ? { alignItems: "center", transform: [{ scale }] }
+            : { alignItems: "center", transform: [{ scale }] }]}>
+          <Ionicons
+            name={iconName as any}
+            size={24}
+            color={(isFocused && route.name !== 'home') ? COLORS.GreenPrimary : COLORS.GrayFont}
+          />
+          <Text
+            style={[{
+              color: (isFocused && route.name !== 'home') ? COLORS.GreenPrimary : COLORS.GrayFont,
+              fontSize: 10,
+            }, styles.tabText]}
+          >
+            {label as string}
+          </Text>
+        </Animated.View>
+
+      ) : (
+        <Animated.View style={
+          { alignItems: "center", transform: [{ scale }], backgroundColor: COLORS.GreenPrimary, padding: 15, borderRadius: 20, position: 'absolute', top: -20, elevation: 5 }}>
+          <Ionicons
+            name={iconName as any}
+            size={20}
+            color={isFocused ? "#ffff" : COLORS.GrayFont}
+          />
+          <Text
+            style={[{
+              color: (isFocused) ? "#ffff" : COLORS.GrayFont,
+              fontSize: 10,
+              // transform: [{ scale }]
+            }, styles.tabText]}
+          >
+            {label as string}
+          </Text>
+        </Animated.View>
+      )}
+
     </TouchableOpacity>
   );
 }
@@ -80,9 +107,11 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     alignItems: "center",
-
   },
   tabText: {
-    fontFamily: 'MontserratSemiBold'
+    fontFamily: 'MontserratBold'
+  },
+  tabArea: {
+
   }
 })
