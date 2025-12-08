@@ -1,22 +1,23 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CustomerResponseSchema, CustomerWithPurchasesAndPayments } from "../schemas/Customer/customer-schema";
-import { getCustomersAPI } from "../services/get-customers";
+import { getCustomersAPI } from "../services/customer/get-customers";
 import { CreatePurchaseSchema, createPurchaseSchema, PurchaseSchema, PurchaseWithCustomer } from "../schemas/Purchase/purchase-schema";
 import { useAuth } from "./AuthContext";
 import { getTotalSales } from "../utils/get-total-sales";
 import { getTotalDebts } from "../utils/get-total-debts";
 import { nullable } from "zod";
 import { CreateCustomerSchema } from "../schemas/Customer/insert-customer-schema";
-import { insertCustomerAPI } from "../services/insert-customer";
+import { insertCustomerAPI } from "../services/customer/insert-customer";
 import { CreatePaymentSchema, PaymentWithCustomerName } from "../schemas/Payment/payment-schema";
-import { insertPurchaseAPI } from "../services/insert-purchase";
-import { insertPaymentAPI } from "../services/insert-payment";
+import { insertPurchaseAPI } from "../services/purchase/insert-purchase";
+import { insertPaymentAPI } from "../services/payment/insert-payment";
 import { Toast } from "toastify-react-native";
-import { updateCustomerService } from "../services/update-customer";
+import { updateCustomerService } from "../services/customer/update-customer";
 import { handleAxiosError, NormalizedAxiosError } from "../utils/handle-axios-error";
+import { deletePaymentAPI } from "../services/payment/delete-payment";
+import { deletePurchaseAPI } from "../services/purchase/delete-purchase";
 
 interface CustomerContextType {
-  errorGetCustomersData: NormalizedAxiosError,
   loadingCreateCustomer: boolean,
   loadingEditCustomer: boolean,
   loadingPayment: boolean,
@@ -32,8 +33,10 @@ interface CustomerContextType {
   getCustomerById: (customerId: string) => CustomerWithPurchasesAndPayments | null,
   createCustomer: (userData: CreateCustomerSchema) => Promise<CustomerResponseSchema | null>
   createPurchase: (purchaseData: CreatePurchaseSchema) => Promise<boolean>,
-  createPayment: (customerId: number, paymentAmount: number, paymentMethod: string) => Promise<boolean>
-  updateCustomer: (UpdateCustomer: { id: number, name?: string, cpf?: number, phone?: string }) => Promise<CustomerResponseSchema | null>
+  deletePurchase: (purchaseId: number) => Promise<boolean>,
+  createPayment: (customerId: number, paymentAmount: number, paymentMethod: string) => Promise<boolean>,
+  deletePayment: (paymentId: number) => Promise<boolean>,
+  updateCustomer: (UpdateCustomer: { id: number, name?: string, cpf?: number, phone?: string }) => Promise<CustomerResponseSchema | NormalizedAxiosError | null>
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined)
@@ -158,8 +161,8 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const getCustomerById = useCallback((customerId: string) =>
 
     fullCustomerData?.find((customer) => customer.id.toString() === customerId) || null,
-    [fullCustomerData]
-  )
+
+    [fullCustomerData])
 
   const createCustomer = useCallback(async (userData: CreateCustomerSchema) => {
     let newUser = null
@@ -267,6 +270,54 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   }, [fetchCustomersData])
 
 
+  const deletePayment = useCallback(async (paymentId: number) => {
+    setLoadingPayment(true)
+
+    let response = false
+
+    try {
+      const apiResponse = await deletePaymentAPI(paymentId)
+
+      if (!apiResponse) return response
+
+      response = apiResponse
+      await fetchCustomersData()
+
+    } catch (error) {
+      console.log('Erro ao deletar pagamento')
+      console.log(error)
+
+    } finally {
+      setLoadingPayment(false)
+    }
+
+    return response
+  }, [])
+
+  const deletePurchase = useCallback(async (purchaseId: number) => {
+    setLoadingPurchase(true)
+
+    let response = false
+
+    try {
+      const apiResponse = await deletePurchaseAPI(purchaseId)
+
+      if (!apiResponse) return response
+
+      response = apiResponse
+      await fetchCustomersData()
+
+    } catch (error) {
+      console.log("Erro ao deletar compra - CONTEXT")
+      console.log(error)
+    } finally {
+      setLoadingPurchase(false)
+    }
+    return response
+  }, [])
+
+
+
   const value: CustomerContextType = {
     fullCustomerData,
     getCustomerById,
@@ -280,7 +331,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     totalSales,
     createCustomer,
     createPurchase,
+    deletePurchase,
     createPayment,
+    deletePayment,
     payments,
     lastPayments,
     updateCustomer,

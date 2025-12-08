@@ -8,7 +8,9 @@ import { COLORS } from '@/src/constants/Colors'
 import CustomButton from '../CustomButton'
 import CustomDatePicker from '../CustomDatePicker'
 import { PaymentSchema, PaymentWithCustomerName } from '@/src/schemas/Payment/payment-schema'
-
+import { useNavigation } from '@react-navigation/native'
+import CustomerList, { CustomerListNavigationProp } from '../CustomerList'
+import { useToast } from '@/src/hooks/useToast'
 interface ListItemsProps {
   purchases?: PurchaseWithCustomer[]
   payments?: PaymentWithCustomerName[]
@@ -17,8 +19,10 @@ interface ListItemsProps {
 
 export default function ListItems(props: ListItemsProps) {
 
+  const navigation = useNavigation<CustomerListNavigationProp>()
+  const { success } = useToast()
 
-  // const { purchases } = useCustomer()
+  const { deletePayment, deletePurchase, payments, purchases, loadingPayment, loadingPurchase } = useCustomer()
 
   const [filteredItems, setFilteredItems] = useState<(PurchaseWithCustomer | PaymentWithCustomerName)[] | null>(null)
 
@@ -53,6 +57,36 @@ export default function ListItems(props: ListItemsProps) {
     setFilterDate(date)
   }
 
+  const handleDeleteItem = async (item: PurchaseWithCustomer | PaymentWithCustomerName) => {
+    console.log('Delete item')
+    console.log(item)
+
+    const isPayment = "payment_method" in item
+
+    if (isPayment) {
+      const response = await deletePayment(item.id)
+
+      if (response.statusText === "OK") {
+        success('Pagamento deletado com sucesso')
+      }
+
+      console.log("Response deletePayment")
+      console.log(response)
+      return
+    }
+    else {
+      const response = await deletePurchase(item.id)
+
+      if (response) {
+        success('Venda deletada com sucesso')
+      }
+
+      console.log("Response deletePurchase")
+      console.log(response)
+      return
+    }
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{
@@ -68,7 +102,9 @@ export default function ListItems(props: ListItemsProps) {
         <FlatList
           data={filteredItems as (PurchaseWithCustomer | PaymentWithCustomerName)[]}
           renderItem={({ item }) => (
-            props.modal ? <ListItemCard item={item} editMode /> : <ListItemCard item={item} />)}
+            props.modal
+              ? <ListItemCard item={item} editMode buttonAction={(item) => handleDeleteItem(item)} isLoading={loadingPayment || loadingPurchase} />
+              : <ListItemCard item={item} />)}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ paddingBottom: 80 }}
         />

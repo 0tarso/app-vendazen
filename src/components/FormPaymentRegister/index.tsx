@@ -16,17 +16,17 @@ import { getCustomerTotalDebt } from '@/src/utils/get-total-customer-debt';
 import { PaymentMethod } from '../ListItemCard';
 import { Toast } from 'toastify-react-native';
 import { useToast } from '@/src/hooks/useToast';
-import { transformMethodName } from '@/src/utils/transform-payment-method';
+import { transformPaymentMethodName } from '@/src/utils/transform-payment-method';
 import { tr } from 'zod/v4/locales';
 
 export default function FormPaymentRegister() {
   const { success, error } = useToast()
 
   const paymentMethods = [
-    { key: 1, label: transformMethodName('PIX') },
-    { key: 2, label: transformMethodName('CASH') },
-    { key: 3, label: transformMethodName('DEBIT CARD') },
-    { key: 4, label: transformMethodName('CREDIT CARD') },
+    { key: 1, label: transformPaymentMethodName("PIX", 'display') },
+    { key: 2, label: transformPaymentMethodName("CASH", 'display') },
+    { key: 3, label: transformPaymentMethodName("DEBIT CARD", 'display') },
+    { key: 4, label: transformPaymentMethodName("CREDIT CARD", 'display') }
   ]
 
   const { createPayment, loadingCustomerData, fullCustomerData } = useCustomer()
@@ -94,10 +94,11 @@ export default function FormPaymentRegister() {
       return
     }
 
+
     const fullPayment = {
       customerId: customerSelectedId,
       paymentAmount: data.amount,
-      paymentMethod: paymentMethod
+      paymentMethod: transformPaymentMethodName(paymentMethod, 'sendData')
     }
 
     console.log(fullPayment)

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { UserResponse } from "../schemas/User/user-schema";
-import { getUserByIdAPI } from "../services/get-user-by-id";
+import { getUserByIdAPI } from "../services/user/get-user-by-id";
 import { useAuth } from "./AuthContext";
 
 interface UserContextType {

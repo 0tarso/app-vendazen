@@ -1,7 +1,7 @@
 
-import { CreatePurchaseSchema, PurchaseSchema } from '../schemas/Purchase/purchase-schema'
-import { handleAxiosError } from '../utils/handle-axios-error'
-import api from '../api/api'
+import { CreatePurchaseSchema, PurchaseSchema } from '../../schemas/Purchase/purchase-schema'
+import { handleAxiosError } from '../../utils/handle-axios-error'
+import api from '../../api/api'
 
 export const insertPurchaseAPI = async (purchaseData: CreatePurchaseSchema) => {
 

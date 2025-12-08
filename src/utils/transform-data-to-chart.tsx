@@ -50,7 +50,7 @@ const PAYMENT_COLORS: Record<string, string> = {
   default: '#999999'
 };
 
-export function formatPaymentMethodPercentageForPie<T extends ChartFormatData>(
+export function formatPaymentMethodPercentageForPieChart<T extends ChartFormatData>(
   items: T[]
 ): { method: string; value: number; color: string; text: string }[] {
   if (!items || items.length === 0) return [];

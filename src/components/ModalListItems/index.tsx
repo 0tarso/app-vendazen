@@ -23,12 +23,13 @@ export default function ModalListItems(props: ModalListItemsProps) {
       visible={props.visible}
       animationType='slide'
       statusBarTranslucent
+      style={{}}
     // transparent
     >
 
 
       {props.purchases && (
-        <View style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 20 }}>
+        <View style={{ zIndex: -10, flex: 1, paddingHorizontal: 20, paddingBottom: 20 }}>
 
           <Text style={{ fontFamily: 'MontserratSemiBold', fontSize: 20, marginTop: 60, color: COLORS.GrayFont }}>{props.title}</Text>
           <ListItems

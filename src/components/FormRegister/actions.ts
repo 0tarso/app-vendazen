@@ -6,7 +6,7 @@ import { email } from "zod";
 import { handleAxiosError } from "@/src/utils/handle-axios-error";
 import { androidToast } from "@/src/utils/android-toast";
 import { Toast } from "toastify-react-native";
-import { checkEmailService } from "@/src/services/check-email";
+import { checkEmailService } from "../../services/user/check-email";
 
 
 

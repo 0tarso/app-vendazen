@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { AuthSchema } from '../schemas/authSchema';
-import { authUserAPI } from '../services/authUser';
+import { authUserAPI } from '../services/user/authUser';
 import { RegisterSchema } from '../schemas/registerSchema';
-import { signUpUserAPI } from '../services/sign-up-user';
+import { signUpUserAPI } from '../services/user/sign-up-user';
 import { RegisterUserResponseSchema, UserByEmailResponseSchema } from '../schemas/User/user-schema';
 import { handleAxiosError, NormalizedAxiosError } from '../utils/handle-axios-error';
 

@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import { BarChart, PieChart } from 'react-native-gifted-charts'
 import { Ionicons } from '@expo/vector-icons'
-import { transformMethodName } from '@/src/utils/transform-payment-method'
+import { transformPaymentMethodName } from '@/src/utils/transform-payment-method'
 
 
 interface CustomChartProps {
@@ -67,11 +67,11 @@ export default function CustomChart(props: CustomChartProps) {
             font='MontserratBold'
           />
 
-          <View style={{ flex: 1, flexDirection: 'row', columnGap: 20, rowGap: 10, flexWrap: 'wrap', justifyContent: 'center', marginTop: 20 }}>
+          <View style={{ flex: 1, flexDirection: 'row', columnGap: 20, rowGap: 10, flexWrap: 'wrap', justifyContent: 'flex-start', marginTop: 20, paddingHorizontal: 20 }}>
             {props.data.map((item) => (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }} key={item.method}>
                 <View style={{ width: 20, height: 20, backgroundColor: item.color, borderRadius: 100 }}></View>
-                <Text style={{ fontFamily: "MontserratSemiBold", color: COLORS.GrayFont, fontSize: 12 }}>{transformMethodName(item.method)} - {item.text}</Text>
+                <Text style={{ fontFamily: "MontserratSemiBold", color: COLORS.GrayFont, fontSize: 12 }}>{transformPaymentMethodName(item.method, 'display')} - {item.text}</Text>
               </View>
             ))}
           </View>

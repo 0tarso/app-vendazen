@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Constants from 'expo-constants'
-import { RegisterSchema } from '../schemas/registerSchema'
-import { RegisterUserResponseSchema } from '../schemas/User/user-schema'
-import { HttpStatusCode } from '../utils/http-status-code'
+import { RegisterSchema } from '../../schemas/registerSchema'
+import { RegisterUserResponseSchema } from '../../schemas/User/user-schema'
+import { HttpStatusCode } from '../../utils/http-status-code'
 
 
 export const signUpUserAPI = async (userData: RegisterSchema) => {

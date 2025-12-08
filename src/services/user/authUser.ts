@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { AuthSchema } from '../schemas/authSchema'
+import { AuthSchema } from '../../schemas/authSchema'
 import Constants from 'expo-constants'
-import { HttpStatusCode } from '../utils/http-status-code'
-import { AuthUser } from '../contexts/AuthContext'
+import { HttpStatusCode } from '../../utils/http-status-code'
+import { AuthUser } from '../../contexts/AuthContext'
 
 export const authUserAPI = async (userData: AuthSchema) => {
 

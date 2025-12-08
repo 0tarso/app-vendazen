@@ -1,5 +1,5 @@
-import api from "../api/api";
-import { CustomerResponseSchema } from "../schemas/Customer/customer-schema";
+import api from "../../api/api";
+import { CustomerResponseSchema } from "../../schemas/Customer/customer-schema";
 
 
 export const updateCustomerService = async (

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import CustomDatePicker from '@/src/components/CustomDatePicker'
 import { useCustomer } from '@/src/contexts/CustomerContext'
 import { COLORS } from '@/src/constants/Colors';
-import { formatPaymentMethodPercentageForPie, formatToChartByMonth } from '@/src/utils/transform-data-to-chart';
+import { formatPaymentMethodPercentageForPieChart, formatToChartByMonth } from '@/src/utils/transform-data-to-chart';
 import CustomChart from '@/src/components/CustomChart';
 import { set } from 'zod';
 
@@ -53,7 +53,7 @@ export default function ReportsScreen() {
   useEffect(() => {
     if (!payments) return
 
-    const paymentsToPieChart = formatPaymentMethodPercentageForPie(payments)
+    const paymentsToPieChart = formatPaymentMethodPercentageForPieChart(payments)
     setPaymentsPieChartValues(paymentsToPieChart)
 
     console.log(paymentsToPieChart)
