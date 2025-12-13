@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ModalSelector from 'react-native-modal-selector'
 import { COLORS } from '@/src/constants/Colors'
+import { Text } from 'react-native'
 
 
 interface CustomModalSelectorProps {
@@ -11,10 +12,13 @@ interface CustomModalSelectorProps {
 }
 
 export default function CustomModalSelector(props: CustomModalSelectorProps) {
+
+
   const [selectedValue, setSelectedValue] = useState<string | number | null>(null)
 
   return (
     <>
+
       <ModalSelector
         data={props.data}
         initValue={selectedValue ? selectedValue.toString() : props.placeholder}

@@ -8,9 +8,11 @@ import { COLORS } from '@/src/constants/Colors'
 import CustomButton from '../CustomButton'
 import CustomDatePicker from '../CustomDatePicker'
 import { PaymentSchema, PaymentWithCustomerName } from '@/src/schemas/Payment/payment-schema'
-import { useNavigation } from '@react-navigation/native'
 import CustomerList, { CustomerListNavigationProp } from '../CustomerList'
 import { useToast } from '@/src/hooks/useToast'
+import { styles } from './styles'
+import { deleteItemAction } from './actions'
+
 interface ListItemsProps {
   purchases?: PurchaseWithCustomer[]
   payments?: PaymentWithCustomerName[]
@@ -19,10 +21,9 @@ interface ListItemsProps {
 
 export default function ListItems(props: ListItemsProps) {
 
-  const navigation = useNavigation<CustomerListNavigationProp>()
-  const { success } = useToast()
+  const { success, error } = useToast()
 
-  const { deletePayment, deletePurchase, payments, purchases, loadingPayment, loadingPurchase } = useCustomer()
+  const { deletePayment, deletePurchase, loadingPayment, loadingPurchase } = useCustomer()
 
   const [filteredItems, setFilteredItems] = useState<(PurchaseWithCustomer | PaymentWithCustomerName)[] | null>(null)
 
@@ -49,46 +50,49 @@ export default function ListItems(props: ListItemsProps) {
 
   }, [filterDate, items]);
 
+
   const showAllItems = () => {
     setFilteredItems(items || null);
   }
+
 
   const handleSetFilterDate = (date: string) => {
     setFilterDate(date)
   }
 
-  const handleDeleteItem = async (item: PurchaseWithCustomer | PaymentWithCustomerName) => {
-    console.log('Delete item')
-    console.log(item)
 
+  const handleDeleteItem = async (item: PurchaseWithCustomer | PaymentWithCustomerName) => {
+
+    const isPurchase = "paid" in item
     const isPayment = "payment_method" in item
 
     if (isPayment) {
-      const response = await deletePayment(item.id)
 
-      if (response.statusText === "OK") {
-        success('Pagamento deletado com sucesso')
+      console.log("é pagamento")
+      const isDeleted = await deleteItemAction(item, 'payment', deletePayment)
+      if (!isDeleted) {
+        error('Erro ao deletar pagamento')
+        return
       }
-
-      console.log("Response deletePayment")
-      console.log(response)
+      success('Pagamento deletado com sucesso')
       return
     }
-    else {
-      const response = await deletePurchase(item.id)
 
-      if (response) {
-        success('Venda deletada com sucesso')
+    if (isPurchase) {
+      const isDeleted = await deleteItemAction(item, 'purchase', deletePurchase)
+      if (!isDeleted) {
+        error('Erro ao deletar venda')
+        return
       }
-
-      console.log("Response deletePurchase")
-      console.log(response)
+      success('Venda deletada com sucesso')
       return
     }
+
   }
 
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View style={{
         position: 'absolute',
         bottom: 30
@@ -103,18 +107,19 @@ export default function ListItems(props: ListItemsProps) {
           data={filteredItems as (PurchaseWithCustomer | PaymentWithCustomerName)[]}
           renderItem={({ item }) => (
             props.modal
-              ? <ListItemCard item={item} editMode buttonAction={(item) => handleDeleteItem(item)} isLoading={loadingPayment || loadingPurchase} />
+              ? <ListItemCard item={item} editMode buttonAction={(item) => handleDeleteItem(item)}
+                isLoading={loadingPayment || loadingPurchase} />
               : <ListItemCard item={item} />)}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          contentContainerStyle={styles.listContainer}
         />
       ) : (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.noDataMessageContainer}>
           <Ionicons name='calendar-clear-outline' size={60} color={COLORS.GreenPrimary} />
-          <Text style={{ fontSize: 22, marginTop: 20, textAlign: 'center', fontFamily: "MontserratRegular" }}>
+          <Text style={styles.noDataMessage}>
             {props.payments ? 'Nenhum pagamento nessa data' : 'Nenhuma venda nessa data'}</Text>
 
-          <View style={{ width: '100%', marginTop: 50 }}>
+          <View style={styles.buttonContainer}>
 
             <CustomButton
               label={

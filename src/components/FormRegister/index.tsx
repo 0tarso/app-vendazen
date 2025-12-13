@@ -23,6 +23,7 @@ export default function RegisterForm() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const [step, setStep] = useState(1)
+  const [loadingSteps, setLoadingSteps] = useState(false)
 
   useEffect(() => {
     // Adiciona os ouvintes de eventos ao montar o componente
@@ -54,7 +55,9 @@ export default function RegisterForm() {
 
 
   const handleNextStep = async () => {
-    nextStep(step, setStep, trigger, getValues)
+    setLoadingSteps(true)
+    await nextStep(step, setStep, trigger, getValues)
+    setLoadingSteps(false)
   }
 
   const handlePreviousStep = async () => {
@@ -153,6 +156,7 @@ export default function RegisterForm() {
                   isDisabled={false}
                   label='Próximo'
                   onPress={handleNextStep}
+                  loading={loadingSteps}
                 />
               </View>
 
@@ -164,6 +168,7 @@ export default function RegisterForm() {
                   isDisabled={false}
                   label='Próximo'
                   onPress={handleNextStep}
+                  loading={loadingSteps}
                 />
               </View>
 
@@ -197,6 +202,7 @@ export default function RegisterForm() {
                 isDisabled={false}
                 label='Próximo'
                 onPress={handleNextStep}
+                loading={loadingSteps}
               />
             </View>
 
@@ -208,6 +214,8 @@ export default function RegisterForm() {
                 isDisabled={false}
                 label='Próximo'
                 onPress={handleNextStep}
+                loading={loadingSteps}
+
               />
             </View>
 

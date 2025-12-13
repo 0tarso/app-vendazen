@@ -20,7 +20,7 @@ import { transformPaymentMethodName } from '@/src/utils/transform-payment-method
 import { tr } from 'zod/v4/locales';
 
 export default function FormPaymentRegister() {
-  const { success, error } = useToast()
+  const { success, error, info } = useToast()
 
   const paymentMethods = [
     { key: 1, label: transformPaymentMethodName("PIX", 'display') },
@@ -75,22 +75,22 @@ export default function FormPaymentRegister() {
   const onSubmit = async (data: CreatePaymentSchema) => {
 
     if (customerSelectedId === null) {
-      androidToast('Selecione o cliente')
+      info('Selecione o cliente')
       return;
     }
 
     if (paymentMethod === null) {
-      androidToast('Selecione a forma de pagamento')
+      info('Selecione a forma de pagamento')
       return
     }
 
     if (customerDebt === 0 || customerDebt === null) {
-      androidToast('Cliente não tem dívidas')
+      info('Cliente não tem dívidas')
       return
     }
 
     if (data.amount > customerDebt) {
-      androidToast(`Cliente deve somente: ${customerDebt.toFixed(2)}`)
+      info(`Cliente deve somente: ${customerDebt.toFixed(2)}`)
       return
     }
 
@@ -135,35 +135,51 @@ export default function FormPaymentRegister() {
 
       </View>
 
-      <View style={{ rowGap: 30 }}>
-        <CustomModalSelector
-          placeholder='Selecione um cliente'
-          data={customersList ?? []}
-          onChange={(key, label) => {
-            setCustomerSelectedId(key)
-          }}
-        />
+      {customersList && customersList?.length > 0 && (
+        <View style={{ rowGap: 30 }}>
+          <CustomModalSelector
+            placeholder='Selecione um cliente'
+            data={customersList ?? []}
+            onChange={(key, label) => {
+              setCustomerSelectedId(key)
+            }}
+          />
 
-        <CustomModalSelector
-          placeholder='Selecione o tipo de pagamento'
-          data={paymentMethods ?? []}
-          onChange={(key, label) => {
-            console.log(label)
-            setPaymentMethod(label)
-          }}
-        />
-      </View>
+          <CustomModalSelector
+            placeholder='Selecione o tipo de pagamento'
+            data={paymentMethods ?? []}
+            onChange={(key, label) => {
+              console.log(label)
+              setPaymentMethod(label)
+            }}
+          />
+        </View>
+
+      )}
+
 
 
       <>
-        <View style={{ marginTop: 70 }}>
-          <CustomButton
-            isDisabled={false}
-            label='Receber'
-            onPress={handleSubmit(onSubmit)}
-            loading={loadingCustomerData}
-          />
-        </View>
+        {!customersList || customersList?.length === 0 ? (
+          <View style={{ marginTop: 120 }}>
+            <Text style={styles.noCustomerListMessage}>Primeiro adicione clientes</Text>
+            <CustomButton
+              isDisabled={false}
+              label='Adicionar Cliente'
+              onPress={() => navigate('customers', { screen: 'customer-register' })}
+              loading={loadingCustomerData}
+            />
+          </View>
+        ) : (
+          <View style={{ marginTop: 70 }}>
+            <CustomButton
+              isDisabled={false}
+              label='Receber'
+              onPress={handleSubmit(onSubmit)}
+              loading={loadingCustomerData}
+            />
+          </View>
+        )}
       </>
     </View>
   )
@@ -178,5 +194,12 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratSemiBold',
     fontSize: 42,
     color: COLORS.GrayFont
+  },
+  noCustomerListMessage: {
+    fontSize: 18,
+    fontFamily: 'MontserratSemiBold',
+    textAlign: 'center',
+    color: COLORS.GreenPrimary,
+    marginBottom: 20
   }
 })

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Keyboard, ScrollView } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import { useForm } from 'react-hook-form';
@@ -8,17 +8,16 @@ import CustomButton from '../CustomButton';
 import { useCustomer } from '@/src/contexts/CustomerContext';
 import { createPurchaseInput, CreatePurchaseInput, createPurchaseSchema, CreatePurchaseSchema } from '@/src/schemas/Purchase/purchase-schema';
 import CustomModalSelector from '../CustomModalSelector';
-import { androidToast } from '@/src/utils/android-toast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootTabParamList } from '@/src/routes/app.routes';
 import { useToast } from '@/src/hooks/useToast';
 
 export default function FormPurchaseRegister() {
 
-  const { success, error } = useToast()
+  const { success, error, info } = useToast()
 
   const { createPurchase, fullCustomerData, loadingPurchase } = useCustomer()
-  const { reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
+  const { navigate, reset: resetHistory } = useNavigation<NavigationProp<RootTabParamList>>()
 
   const [customerSelectedId, setCustomerSelectedId] = useState<number | null>(null);
   const [customersList, setCustomersList] = useState<{ key: number; label: string; }[] | null>(null)
@@ -49,7 +48,7 @@ export default function FormPurchaseRegister() {
   const onSubmit = async (data: CreatePurchaseInput) => {
 
     if (customerSelectedId === null) {
-      alert('Selecione o cliente')
+      info('Selecione o cliente')
       return;
     }
 
@@ -61,16 +60,17 @@ export default function FormPurchaseRegister() {
     if (!isNewPurchaseCreated) return error('Erro ao salvar pagamento. Tente novamente.', 'Algo deu errado!')
 
     success('Venda feita com sucesso', 'Venda feita!')
+
     resetHistory({
       index: 0,
       routes: [{ name: 'home' }],
     })
+
   };
 
 
   return (
     <>
-
       <View style={{ paddingTop: 30 }}>
 
         <Text style={styles.title}>Opa!</Text>
@@ -86,23 +86,37 @@ export default function FormPurchaseRegister() {
 
       </View>
 
-      <View>
-        <CustomModalSelector
-          placeholder='Selecione o cliente'
-          data={customersList ?? []}
-          onChange={(key, label) => setCustomerSelectedId(key)}
-        />
-      </View>
-
+      {customersList && customersList?.length > 0 && (
+        <View>
+          <CustomModalSelector
+            placeholder='Selecione o cliente'
+            data={customersList ?? []}
+            onChange={(key, label) => setCustomerSelectedId(key)}
+          />
+        </View>
+      )}
 
       <>
         <View style={{ marginTop: 120 }}>
-          <CustomButton
-            isDisabled={false}
-            label='Vender'
-            onPress={handleSubmit(onSubmit)}
-            loading={loadingPurchase}
-          />
+          {!customersList || customersList?.length === 0 ? (
+            <>
+              <Text style={styles.noCustomerListMessage}>Primeiro adicione clientes</Text>
+              <CustomButton
+                isDisabled={false}
+                label='Adicionar Cliente'
+                onPress={() => navigate('customers', { screen: 'customer-register' })}
+                loading={loadingPurchase}
+              />
+            </>
+          ) : (
+            <CustomButton
+              isDisabled={false}
+              label='Vender'
+              onPress={handleSubmit(onSubmit)}
+              loading={loadingPurchase}
+            />
+
+          )}
         </View>
       </>
     </>
@@ -118,5 +132,12 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratSemiBold',
     fontSize: 42,
     color: COLORS.GrayFont
+  },
+  noCustomerListMessage: {
+    fontSize: 18,
+    fontFamily: 'MontserratSemiBold',
+    textAlign: 'center',
+    color: COLORS.GreenPrimary,
+    marginBottom: 20
   }
 })

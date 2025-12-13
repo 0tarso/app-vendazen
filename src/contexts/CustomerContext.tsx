@@ -252,10 +252,13 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
 
     let response = false
 
-    try {
-      response = await insertPaymentAPI(customerId, paymentAmount, paymentMethod)
+    console.log(paymentMethod)
 
-      if (!response) return response
+    try {
+      const apiResponse = await insertPaymentAPI(customerId, paymentAmount, paymentMethod)
+
+      if (!apiResponse) return response
+      response = apiResponse
 
       await fetchCustomersData()
 

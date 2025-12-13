@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import React, { ReactNode } from 'react'
+import { View, Text, ActivityIndicator } from 'react-native'
+import React, { ReactNode, useEffect } from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import { BarChart, PieChart } from 'react-native-gifted-charts'
 import { Ionicons } from '@expo/vector-icons'
@@ -7,13 +7,27 @@ import { transformPaymentMethodName } from '@/src/utils/transform-payment-method
 
 
 interface CustomChartProps {
-  data: [{ value: number, label: string, topLabelComponent: () => ReactNode }]
+  data: { value: number, label: string, topLabelComponent: () => ReactNode }[]
   maxValue: number | 0,
   type?: 'bar' | 'pie'
 }
 
 
 export default function CustomChart(props: CustomChartProps) {
+
+  if (props.data.length === 0) {
+    return (
+      <View style={{ height: 150, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{
+          fontFamily: 'MontserratSemiBold',
+          fontSize: 16,
+          color: COLORS.GrayFont,
+          textAlign: 'center',
+          paddingVertical: 20
+        }}>Sem dados suficientes</Text>
+      </View>
+    )
+  }
 
   return (
 
@@ -52,7 +66,6 @@ export default function CustomChart(props: CustomChartProps) {
 
       {props.type === 'pie' && (
         <>
-
           <PieChart
             data={props.data}
             showText

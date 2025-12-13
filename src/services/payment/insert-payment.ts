@@ -4,8 +4,8 @@ export const insertPaymentAPI = async (customerId: number, paymentAmount: number
 
   enum ConvertedPayment {
     'Pix' = 'PIX',
-    'Débito' = 'DEBIT CARD',
-    'Crédito' = 'CREDIT CARD',
+    'Cartão de Débito' = 'DEBIT CARD',
+    'Cartão de Crédito' = 'CREDIT CARD',
     'Dinheiro' = 'CASH'
   }
 
@@ -30,5 +30,4 @@ export const insertPaymentAPI = async (customerId: number, paymentAmount: number
   }
 
   return response
-
 }

@@ -55,6 +55,7 @@ export function formatPaymentMethodPercentageForPieChart<T extends ChartFormatDa
 ): { method: string; value: number; color: string; text: string }[] {
   if (!items || items.length === 0) return [];
 
+  console.log(items)
   const total = items.length;
 
   const countByMethod: Record<string, number> = {};

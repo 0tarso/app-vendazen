@@ -54,7 +54,9 @@ export default function ReportsScreen() {
     if (!payments) return
 
     const paymentsToPieChart = formatPaymentMethodPercentageForPieChart(payments)
+    // console.log(paymentsToPieChart)
     setPaymentsPieChartValues(paymentsToPieChart)
+
 
     console.log(paymentsToPieChart)
     setLoading(false)
@@ -82,14 +84,12 @@ export default function ReportsScreen() {
           </View>
         </View>
 
-        {purchasesChartValues ? (
+        {paymentsChartValues.length > 0 && (
           <CustomChart
             data={purchasesChartValues}
             maxValue={purchasesMaxValues}
             type='bar'
           />
-        ) : (
-          <Text>Sem dados suficientes</Text>
         )}
       </View>
 
@@ -104,14 +104,12 @@ export default function ReportsScreen() {
           </View>
         </View>
 
-        {paymentsChartValues ? (
+        {paymentsChartValues.length > 0 && (
           <CustomChart
             data={paymentsChartValues}
             maxValue={paymentsMaxValues}
             type='bar'
           />
-        ) : (
-          <Text>Sem dados suficientes</Text>
         )}
       </View>
 
@@ -126,14 +124,12 @@ export default function ReportsScreen() {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          {paymentsChartValues ? (
+          {paymentsChartValues.length > 0 && (
             <CustomChart
               data={paymentsPieChartValues}
               maxValue={paymentsMaxValues}
               type='pie'
             />
-          ) : (
-            <Text>Sem dados suficientes</Text>
           )}
         </View>
       </View>
@@ -165,5 +161,12 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratBold',
     fontSize: 18,
     color: COLORS.GrayFont
+  },
+  noDataText: {
+    fontFamily: 'MontserratSemiBold',
+    fontSize: 16,
+    color: COLORS.GrayFont,
+    textAlign: 'center',
+    paddingVertical: 20
   }
 })

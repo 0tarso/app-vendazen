@@ -5,6 +5,7 @@ import CustomerCard from '../CustomerCard'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes'
+import { COLORS } from '@/src/constants/Colors'
 
 
 export type CustomerListNavigationProp = StackNavigationProp<
@@ -25,7 +26,7 @@ export default function CustomerList() {
 
   return (
     <View style={styles.container}>
-      {fullCustomerData && (
+      {fullCustomerData && fullCustomerData.length > 0 ? (
         <FlatList
           contentContainerStyle={{ paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
@@ -40,6 +41,16 @@ export default function CustomerList() {
           )}
         />
 
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{
+            fontFamily: 'MontserratSemiBold',
+            fontSize: 16,
+            color: COLORS.GrayFont,
+            textAlign: 'center',
+            paddingVertical: 20
+          }}>Você ainda não possui clientes</Text>
+        </View>
       )}
     </View>
   )
