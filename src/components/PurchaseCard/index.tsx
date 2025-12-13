@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { PurchaseSchema } from '@/src/schemas/Purchase/purchase-schema'
 import { COLORS } from '@/src/constants/Colors'
+import { styles } from './styles'
 
 interface PurchaseCardProps {
   purchase: PurchaseSchema
@@ -36,38 +37,3 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    marginLeft: 12,
-    marginRight: 6,
-    width: 150,
-    alignItems: 'center',
-    paddingVertical: 20,
-    // padding: 25,
-    borderRadius: 30,
-    borderColor: COLORS.GreenSecondary,
-    borderWidth: 2,
-    elevation: 1,
-    marginBottom: 10
-  },
-  purchaseValue: {
-    fontFamily: 'MontserratBold',
-    fontSize: 24,
-    textAlign: 'center',
-    color: COLORS.GreenPrimary
-
-  },
-  purchaseDate: {
-    marginTop: 5,
-    fontFamily: 'MontserratRegular',
-    textAlign: 'center',
-    color: COLORS.GreenPrimary
-  },
-  purchaseTime: {
-    fontFamily: 'MontserratRegular',
-    textAlign: 'center',
-    color: COLORS.GreenPrimary
-  }
-
-})

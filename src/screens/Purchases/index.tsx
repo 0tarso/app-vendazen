@@ -9,7 +9,10 @@ export default function PurchasesScreen() {
 
   return (
     <View style={{ flex: 1, paddingHorizontal: 15 }}>
-      <ListItems purchases={purchases ?? []} />
+      <ListItems
+        purchases={purchases ?? []}
+        modal={false}
+      />
     </View>
   )
 }

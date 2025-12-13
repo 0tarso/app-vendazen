@@ -5,10 +5,7 @@ import { COLORS } from '../../constants/Colors'
 export default function Logo({ fontSize }: { fontSize: number }) {
 
   return (
-    // <View style={styles.container}>
-
     <Text style={[styles.text, { fontSize: fontSize }]}>VendaZen</Text>
-    // </View>
   )
 }
 

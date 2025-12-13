@@ -18,6 +18,7 @@ import { Toast } from 'toastify-react-native';
 import { useToast } from '@/src/hooks/useToast';
 import { transformPaymentMethodName } from '@/src/utils/transform-payment-method';
 import { tr } from 'zod/v4/locales';
+import { styles } from './styles';
 
 export default function FormPaymentRegister() {
   const { success, error, info } = useToast()
@@ -186,20 +187,3 @@ export default function FormPaymentRegister() {
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-
-  },
-  title: {
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 42,
-    color: COLORS.GrayFont
-  },
-  noCustomerListMessage: {
-    fontSize: 18,
-    fontFamily: 'MontserratSemiBold',
-    textAlign: 'center',
-    color: COLORS.GreenPrimary,
-    marginBottom: 20
-  }
-})

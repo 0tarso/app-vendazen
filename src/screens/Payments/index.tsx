@@ -11,6 +11,7 @@ export default function PaymentsScreen() {
     <View style={{ flex: 1, paddingHorizontal: 15 }}>
       <ListItems
         payments={payments ?? []}
+        modal={false}
       />
     </View>
   )

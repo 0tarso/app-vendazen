@@ -6,8 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 
 export default function PurchaseRegister() {
 
-  const { navigate } = useNavigation()
-
   return (
     <View >
 
@@ -25,14 +23,3 @@ export default function PurchaseRegister() {
     </View>
   )
 }
-
-
-const styles = StyleSheet.create({
-  formContainer: {
-    paddingHorizontal: 20,
-    // flex: 1,
-    height: '100%',
-    backgroundColor: 'red',
-
-  }
-})

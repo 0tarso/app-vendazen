@@ -4,6 +4,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import TabItem from '../TabItem'
 
 import SpeedDialButton from '../SpeedDialButton'
+import { styles } from './styles'
 
 export default function TabBar(props: BottomTabBarProps) {
 
@@ -50,12 +51,3 @@ export default function TabBar(props: BottomTabBarProps) {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    backgroundColor: '#fff',
-    paddingBottom: 60,
-    paddingTop: 20,
-    elevation: 20
-  },
-})

@@ -12,6 +12,7 @@ import { CustomerListNavigationProp } from '../CustomerList';
 import { androidToast } from '@/src/utils/android-toast';
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
 import { useToast } from '@/src/hooks/useToast';
+import { styles } from './styles';
 
 export default function FormCustomerRegister() {
 
@@ -128,13 +129,3 @@ export default function FormCustomerRegister() {
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-
-  },
-  title: {
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 42,
-    color: COLORS.GrayFont
-  }
-})

@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { COLORS } from '@/src/constants/Colors'
+import { styles } from './styles'
 
 interface CustomButtonProps {
   onPress: () => void
@@ -27,21 +28,3 @@ export default function CustomButton({ onPress, loading, label, isDisabled }: Cu
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    // backgroundColor: "pink",
-    position: 'relative'
-  },
-  button: {
-    backgroundColor: COLORS.GreenPrimary,
-    borderRadius: 50
-  },
-  label: {
-    paddingVertical: 10,
-    textAlign: 'center',
-    fontSize: 22,
-    color: '#fff',
-    fontFamily: 'MontserratBold'
-  }
-})

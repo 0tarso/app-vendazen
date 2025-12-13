@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { COLORS } from '@/src/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
+import { styles } from './styles'
 
 interface SalesSummaryCardProps {
   type: 'sales' | 'debt'
@@ -35,27 +36,3 @@ export default function SalesSummaryCard(props: SalesSummaryCardProps) {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#ffff',
-    borderWidth: 2,
-    borderColor: COLORS.GreenSecondary,
-    marginBottom: 10,
-    borderRadius: 20,
-  },
-  title: {
-    fontFamily: 'MontserratRegular',
-    color: COLORS.GreenPrimary
-  },
-  currency: {
-    fontFamily: 'MontserratRegular',
-    color: COLORS.GreenPrimary,
-    fontSize: 14
-  },
-  value: {
-    fontFamily: 'MontserratBold',
-    fontSize: 26,
-    color: COLORS.GreenPrimary
-  }
-})

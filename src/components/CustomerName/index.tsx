@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/src/constants/Colors'
+import { styles } from './styles'
 
 interface CustomerTitleProps {
   name: string
@@ -22,18 +23,3 @@ export default function CustomerTitle(props: CustomerTitleProps) {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    paddingHorizontal: 20,
-    // backgroundColor: 'blue',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline'
-  },
-  name: {
-    color: COLORS.GreenPrimary,
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 30
-  },
-})

@@ -11,6 +11,7 @@ import CustomModalSelector from '../CustomModalSelector';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootTabParamList } from '@/src/routes/app.routes';
 import { useToast } from '@/src/hooks/useToast';
+import { styles } from './styles';
 
 export default function FormPurchaseRegister() {
 
@@ -123,21 +124,3 @@ export default function FormPurchaseRegister() {
   )
 }
 
-
-const styles = StyleSheet.create({
-  container: {
-
-  },
-  title: {
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 42,
-    color: COLORS.GrayFont
-  },
-  noCustomerListMessage: {
-    fontSize: 18,
-    fontFamily: 'MontserratSemiBold',
-    textAlign: 'center',
-    color: COLORS.GreenPrimary,
-    marginBottom: 20
-  }
-})

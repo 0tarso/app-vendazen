@@ -4,6 +4,7 @@ import { CustomerWithPurchasesAndPayments } from '@/src/schemas/Customer/custome
 import { COLORS } from '@/src/constants/Colors'
 import { getTotalSales } from '@/src/utils/get-total-sales'
 import { Ionicons } from '@expo/vector-icons'
+import { styles } from './styles'
 
 interface CustomerCardProps {
   customer: CustomerWithPurchasesAndPayments
@@ -25,23 +26,3 @@ export default function CustomerCard({ customer, onPress }: CustomerCardProps) {
   )
 }
 
-const styles = StyleSheet.create({
-  buttonCard: {
-    backgroundColor: '#ffff',
-    borderWidth: 2,
-    borderColor: COLORS.GreenSecondary,
-    borderRadius: 15,
-    marginTop: 10,
-    padding: 20
-  },
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline'
-  },
-  name: {
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 18,
-    color: COLORS.GreenPrimary
-  }
-})

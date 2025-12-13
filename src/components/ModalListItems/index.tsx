@@ -18,7 +18,6 @@ export default function ModalListItems(props: ModalListItemsProps) {
 
   return (
 
-
     <Modal
       visible={props.visible}
       animationType='slide'

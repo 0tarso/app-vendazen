@@ -10,6 +10,7 @@ import { useCustomer } from '@/src/contexts/CustomerContext';
 import { useToast } from '@/src/hooks/useToast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CustomerStackParamList } from '@/src/routes/customerStack.routes';
+import { styles } from './styles';
 
 interface FormEditCustomerProps {
   customer: Pick<CustomerWithPurchasesAndPayments, 'name' | 'cpf' | 'id' | 'phone'>
@@ -140,19 +141,3 @@ export default function FormEditCustomer(props: FormEditCustomerProps) {
     </>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  title: {
-    fontFamily: 'MontserratSemiBold',
-    fontSize: 42,
-    color: COLORS.GrayFont
-  },
-  subtitle: {
-    fontFamily: 'MontserratRegular',
-    fontSize: 18,
-    color: COLORS.GrayFont,
-    marginBottom: 50
-  }
-})
